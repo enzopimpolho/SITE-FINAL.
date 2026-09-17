@@ -1,0 +1,31 @@
+# dependencies
+node_modules
+
+# build output
+dist
+dist-ssr
+*.tsbuildinfo
+nextgen-site.zip
+
+# heavy source media (compressed versions live in public/videos)
+media-src
+
+# vercel cli
+.vercel
+
+# env
+.env
+.env.local
+
+# editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# logs
+*.log
+npm-debug.log*
+
+# os
+.DS_Store
+Thumbs.db
