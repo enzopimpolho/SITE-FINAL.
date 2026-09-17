@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ArrowUpRight, CheckCircle2, Loader2 } from "lucide-react";
 import { company } from "../data/company";
 
@@ -9,38 +9,65 @@ interface FormState {
   message: string;
 }
 
-const initialState: FormState = { name: "", email: "", phone: "", message: "" };
-
+type Field = keyof FormState;
+type Errors = Partial<Record<Field, string>>;
 type Status = "idle" | "submitting" | "success";
+
+const initialState: FormState = { name: "", email: "", phone: "", message: "" };
+const fieldOrder: Field[] = ["name", "phone", "email", "message"];
+
+function validate(form: FormState): Errors {
+  const errors: Errors = {};
+  if (!form.name.trim()) errors.name = "Informe seu nome.";
+  if (!form.email.trim()) errors.email = "Informe seu e-mail para podermos responder.";
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    errors.email = "Esse e-mail parece incompleto. Use o formato nome@empresa.com.";
+  }
+  if (!form.message.trim()) errors.message = "Conte um pouco sobre o projeto.";
+  return errors;
+}
 
 const cardClass =
   "flex flex-col gap-4 rounded-3xl border border-white/[0.08] bg-ink-850 p-6 md:gap-5 md:rounded-[28px] md:p-10";
 
-export default function ContactForm() {
-  const [form, setForm] = useState<FormState>(initialState);
-  const [status, setStatus] = useState<Status>("idle");
-  const [error, setError] = useState<string | null>(null);
+interface ContactFormProps {
+  headingLevel?: "h2" | "h3";
+}
 
-  function handleChange(field: keyof FormState, value: string) {
+export default function ContactForm({ headingLevel = "h3" }: ContactFormProps) {
+  const Heading = headingLevel;
+  const [form, setForm] = useState<FormState>(initialState);
+  const [errors, setErrors] = useState<Errors>({});
+  const [status, setStatus] = useState<Status>("idle");
+  const fieldRefs = useRef<Partial<Record<Field, HTMLInputElement | HTMLTextAreaElement | null>>>({});
+  const successRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    if (status === "success") successRef.current?.focus();
+  }, [status]);
+
+  function handleChange(field: Field, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
+  }
+
+  function handleBlur(field: Field) {
+    // Only re-check fields that already showed an error, so users aren't flagged while still typing.
+    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: validate(form)[field] }));
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const found = validate(form);
+    setErrors(found);
 
-    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
-      setError("Preencha nome, e-mail e mensagem para continuar.");
+    const firstInvalid = fieldOrder.find((field) => found[field]);
+    if (firstInvalid) {
+      fieldRefs.current[firstInvalid]?.focus();
       return;
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      setError("Digite um e-mail válido.");
-      return;
-    }
-
-    setError(null);
     setStatus("submitting");
-
     // Projeto sem backend: simula o envio para demonstrar o fluxo da UI.
     window.setTimeout(() => {
       setStatus("success");
@@ -48,12 +75,33 @@ export default function ContactForm() {
     }, 900);
   }
 
+  const fieldProps = (field: Field) => ({
+    id: `contato-${field}`,
+    ref: (el: HTMLInputElement | HTMLTextAreaElement | null) => {
+      fieldRefs.current[field] = el;
+    },
+    value: form[field],
+    onChange: (e: { target: { value: string } }) => handleChange(field, e.target.value),
+    onBlur: () => handleBlur(field),
+    "aria-invalid": errors[field] ? true : undefined,
+    "aria-describedby": errors[field] ? `contato-${field}-erro` : undefined,
+  });
+
+  const errorText = (field: Field) =>
+    errors[field] ? (
+      <p id={`contato-${field}-erro`} className="text-sm text-red-400">
+        {errors[field]}
+      </p>
+    ) : null;
+
   if (status === "success") {
     return (
-      <div className={`${cardClass} items-center justify-center text-center md:min-h-[560px]`}>
-        <CheckCircle2 className="text-accent-ink" size={40} strokeWidth={1.5} />
-        <h3 className="text-2xl font-medium tracking-[-0.02em]">Mensagem enviada.</h3>
-        <p className="max-w-sm text-[15px] leading-relaxed text-fog-400">
+      <div role="status" className={`${cardClass} items-center justify-center text-center md:min-h-[560px]`}>
+        <CheckCircle2 className="text-accent-ink" size={40} strokeWidth={1.5} aria-hidden="true" />
+        <Heading ref={successRef} tabIndex={-1} className="text-2xl font-medium tracking-[-0.02em] outline-none">
+          Mensagem enviada.
+        </Heading>
+        <p className="max-w-sm text-base leading-relaxed text-fog-400">
           Obrigado pelo contato. Nosso time vai analisar sua solicitação e retornar em até 1 dia útil.
         </p>
         <button type="button" onClick={() => setStatus("idle")} className="btn-ghost mt-2 h-12">
@@ -64,77 +112,93 @@ export default function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className={cardClass}>
+    <form onSubmit={handleSubmit} noValidate aria-labelledby="contato-form-titulo" className={cardClass}>
       <div className="flex flex-col gap-1.5">
-        <h3 className="text-[22px] font-medium tracking-[-0.02em]">Conte sobre o seu projeto</h3>
-        <p className="text-sm text-fog-400">Retornamos em até 1 dia útil.</p>
+        <Heading id="contato-form-titulo" className="text-[22px] font-medium tracking-[-0.02em]">
+          Conte sobre o seu projeto
+        </Heading>
+        <p className="text-sm text-fog-400">
+          Retornamos em até 1 dia útil. Campos com <span aria-hidden="true">*</span>
+          <span className="sr-only">asterisco</span> são obrigatórios.
+        </p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <label className="flex flex-col gap-2">
-          <span className="text-[13px] text-fog-200">Nome *</span>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="contato-name" className="text-[13px] text-fog-200">
+            Nome <span aria-hidden="true">*</span>
+          </label>
           <input
             type="text"
             autoComplete="name"
-            value={form.name}
-            onChange={(e) => handleChange("name", e.target.value)}
             placeholder="Seu nome completo"
+            aria-required="true"
             className="field"
+            {...fieldProps("name")}
           />
-        </label>
-        <label className="flex flex-col gap-2">
-          <span className="text-[13px] text-fog-200">Telefone</span>
+          {errorText("name")}
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="contato-phone" className="text-[13px] text-fog-200">
+            Telefone <span className="text-fog-500">(opcional)</span>
+          </label>
           <input
             type="tel"
             autoComplete="tel"
-            value={form.phone}
-            onChange={(e) => handleChange("phone", e.target.value)}
+            inputMode="tel"
             placeholder="(11) 90000-0000"
             className="field"
+            {...fieldProps("phone")}
           />
-        </label>
+        </div>
       </div>
 
-      <label className="flex flex-col gap-2">
-        <span className="text-[13px] text-fog-200">E-mail *</span>
+      <div className="flex flex-col gap-2">
+        <label htmlFor="contato-email" className="text-[13px] text-fog-200">
+          E-mail <span aria-hidden="true">*</span>
+        </label>
         <input
           type="email"
           autoComplete="email"
-          value={form.email}
-          onChange={(e) => handleChange("email", e.target.value)}
+          inputMode="email"
           placeholder="voce@empresa.com"
+          aria-required="true"
           className="field"
+          {...fieldProps("email")}
         />
-      </label>
+        {errorText("email")}
+      </div>
 
-      <label className="flex flex-col gap-2">
-        <span className="text-[13px] text-fog-200">Mensagem *</span>
+      <div className="flex flex-col gap-2">
+        <label htmlFor="contato-message" className="text-[13px] text-fog-200">
+          Mensagem <span aria-hidden="true">*</span>
+        </label>
         <textarea
           rows={5}
-          value={form.message}
-          onChange={(e) => handleChange("message", e.target.value)}
-          placeholder="Conte um pouco sobre o seu projeto"
+          placeholder="Ex.: preciso de um site para minha clínica, com agendamento online"
+          aria-required="true"
           data-lenis-prevent
           className="field h-[150px] resize-none py-3.5"
+          {...fieldProps("message")}
         />
-      </label>
+        {errorText("message")}
+      </div>
 
-      {error && (
-        <p role="alert" className="text-sm text-red-400">
-          {error}
-        </p>
-      )}
-
-      <button type="submit" disabled={status === "submitting"} className="btn-primary w-full disabled:opacity-70">
+      <button
+        type="submit"
+        disabled={status === "submitting"}
+        aria-busy={status === "submitting"}
+        className="btn-primary w-full disabled:cursor-wait disabled:opacity-70"
+      >
         {status === "submitting" ? (
           <>
-            <Loader2 size={16} className="animate-spin" />
+            <Loader2 size={16} className="animate-spin" aria-hidden="true" />
             Enviando...
           </>
         ) : (
           <>
             Enviar mensagem
-            <ArrowUpRight size={16} />
+            <ArrowUpRight size={16} aria-hidden="true" />
           </>
         )}
       </button>
@@ -145,9 +209,10 @@ export default function ContactForm() {
           href={`https://wa.me/${company.whatsappHref}`}
           target="_blank"
           rel="noreferrer"
-          className="text-fog-100 underline-offset-4 hover:text-accent-ink hover:underline"
+          className="inline-block py-1 text-fog-100 underline underline-offset-4 hover:text-accent-ink"
         >
           {company.whatsapp}
+          <span className="sr-only"> (abre em nova aba)</span>
         </a>
       </p>
     </form>

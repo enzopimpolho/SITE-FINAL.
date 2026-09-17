@@ -28,18 +28,19 @@ export default function PortfolioSection({ withIntro = true }: PortfolioSectionP
       {withIntro && (
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
           <SectionIntro label="(02) — Portfólio">
-            Projetos que já <span className="serif-em">colocamos no ar.</span>
+            Projetos conceito <span className="serif-em">criados pela Nextgen.</span>
           </SectionIntro>
           <Reveal delay={0.1} className="lg:w-[360px] lg:shrink-0">
             <p className="text-base leading-relaxed text-fog-400">
-              Uma seleção de sites, sistemas e lojas virtuais desenvolvidos para empresas de diferentes
-              segmentos e portes.
+              Sete sites reais, construídos por nós para mostrar como pensamos design e código para
+              diferentes segmentos. Clique em qualquer um para navegar pelo projeto completo.
             </p>
           </Reveal>
         </div>
       )}
+      {!withIntro && <h2 className="sr-only">Projetos</h2>}
 
-      <div className="-mx-5 flex gap-2 overflow-x-auto px-5 [scrollbar-width:none] md:mx-0 md:flex-wrap md:px-0">
+      <div role="group" aria-label="Filtrar projetos por categoria" className="flex flex-wrap gap-2">
         {categories.map((category) => {
           const selected = category === active;
           return (
@@ -48,7 +49,7 @@ export default function PortfolioSection({ withIntro = true }: PortfolioSectionP
               type="button"
               onClick={() => setActive(category)}
               aria-pressed={selected}
-              className={`h-11 shrink-0 rounded-full border px-4 text-sm transition-colors duration-300 md:px-[18px] ${
+              className={`h-11 rounded-full border px-4 text-sm transition-colors duration-300 md:px-[18px] ${
                 selected
                   ? "border-accent bg-accent text-white"
                   : "border-white/[0.14] text-fog-200 hover:border-white/30 hover:text-fog-50"
@@ -59,6 +60,14 @@ export default function PortfolioSection({ withIntro = true }: PortfolioSectionP
           );
         })}
       </div>
+      <p role="status" className="sr-only">
+        {active === "Todos"
+          ? `Mostrando todos os ${projects.length} projetos.`
+          : `Destacando projetos de ${active}: ${projects
+              .filter((project) => project.category === active)
+              .map((project) => project.name)
+              .join(", ")}.`}
+      </p>
 
       <div className="grid gap-7 md:grid-cols-2 md:gap-6 lg:grid-cols-12">
         {projects.map((project, index) => (

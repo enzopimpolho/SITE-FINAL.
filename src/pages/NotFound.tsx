@@ -12,7 +12,7 @@ export default function NotFound() {
         A página que você tentou acessar não existe ou foi movida.
       </p>
       <Link to="/" className="btn-primary">
-        <ArrowLeft size={16} />
+        <ArrowLeft size={16} aria-hidden="true" />
         Voltar para o início
       </Link>
     </section>

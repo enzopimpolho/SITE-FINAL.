@@ -43,8 +43,8 @@ export default function SplitText({
       initial="hidden"
       animate="visible"
       custom={delay}
-      aria-label={text}
     >
+      <span className="sr-only">{text}</span>
       <span aria-hidden="true" className="contents">
       {words.map((word, index) => (
         <Fragment key={`${word}-${index}`}>

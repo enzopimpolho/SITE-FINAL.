@@ -11,6 +11,8 @@ const serviceNames = [
   "Manutenção e suporte",
 ];
 
+const linkClass = "inline-block py-1 text-base text-fog-100 transition-colors hover:text-accent-ink md:text-[15px]";
+
 export default function Footer() {
   const year = new Date().getFullYear();
 
@@ -19,47 +21,50 @@ export default function Footer() {
       <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-6">
         <div className="col-span-2 flex flex-col gap-4 md:col-span-1">
           <Logo />
-          <p className="max-w-[280px] text-[15px] leading-relaxed text-fog-400">
+          <p className="max-w-[280px] text-base leading-relaxed text-fog-400 md:text-[15px]">
             Sites, sistemas web e aplicações digitais sob medida para empresas que querem crescer com
             tecnologia.
           </p>
         </div>
 
-        <div className="flex flex-col gap-3">
-          <span className="label">Navegação</span>
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className="text-[15px] text-fog-100 transition-colors hover:text-accent-ink"
-            >
-              {link.label}
-            </Link>
-          ))}
+        <nav aria-labelledby="rodape-navegacao" className="flex flex-col gap-2">
+          <h2 id="rodape-navegacao" className="label mb-1">
+            Navegação
+          </h2>
+          <ul className="flex flex-col gap-1">
+            {navLinks.map((link) => (
+              <li key={link.path}>
+                <Link to={link.path} className={linkClass}>
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="hidden flex-col gap-2 md:flex">
+          <h2 className="label mb-1">Serviços</h2>
+          <ul className="flex flex-col gap-1">
+            {serviceNames.map((name) => (
+              <li key={name} className="py-1 text-[15px] text-fog-100">
+                {name}
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <div className="hidden flex-col gap-3 md:flex">
-          <span className="label">Serviços</span>
-          {serviceNames.map((name) => (
-            <span key={name} className="text-[15px] text-fog-100">
-              {name}
-            </span>
-          ))}
-        </div>
-
-        <div className="flex flex-col gap-3">
-          <span className="label">Redes</span>
-          {company.social.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              target="_blank"
-              rel="noreferrer"
-              className="text-[15px] text-fog-100 transition-colors hover:text-accent-ink"
-            >
-              {item.label}
-            </a>
-          ))}
+        <div className="flex flex-col gap-2">
+          <h2 className="label mb-1">Redes</h2>
+          <ul className="flex flex-col gap-1">
+            {company.social.map((item) => (
+              <li key={item.label}>
+                <a href={item.href} target="_blank" rel="noreferrer" className={linkClass}>
+                  {item.label}
+                  <span className="sr-only"> (abre em nova aba)</span>
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 
@@ -71,8 +76,8 @@ export default function Footer() {
       </div>
 
       <div className="flex flex-col gap-1 pr-16 text-xs text-fog-400 md:flex-row md:justify-between md:text-[13px]">
-        <span>© {year} Nextgen. Todos os direitos reservados.</span>
-        <span>Feito em São Paulo, SP.</span>
+        <p>© {year} Nextgen. Todos os direitos reservados.</p>
+        <p>Feito em São Paulo, SP.</p>
       </div>
     </footer>
   );

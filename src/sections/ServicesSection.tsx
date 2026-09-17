@@ -17,11 +17,11 @@ export default function ServicesSection({ showDetails = false }: ServicesSection
         </SectionIntro>
       </div>
 
-      <div className="border-b border-white/[0.08]">
+      <ul className="border-b border-white/[0.08]">
         {services.map((service, index) => (
           <ServiceRow key={service.title} service={service} index={index} showDetails={showDetails} />
         ))}
-      </div>
+      </ul>
     </section>
   );
 }

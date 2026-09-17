@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useInView, useMotionValue, useSpring } from "framer-motion";
+import { useInView, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 
 interface AnimatedCounterProps {
   value: number;
@@ -10,6 +10,7 @@ interface AnimatedCounterProps {
 export default function AnimatedCounter({ value, suffix = "", className }: AnimatedCounterProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-10% 0px" });
+  const reduceMotion = useReducedMotion();
   const motionValue = useMotionValue(0);
   const spring = useSpring(motionValue, { duration: 1.4, bounce: 0 });
 
@@ -26,8 +27,15 @@ export default function AnimatedCounter({ value, suffix = "", className }: Anima
   }, [spring, suffix]);
 
   return (
-    <span ref={ref} className={className}>
-      0{suffix}
+    <span className={className}>
+      <span ref={ref} aria-hidden="true">
+        {reduceMotion ? value : 0}
+        {suffix}
+      </span>
+      <span className="sr-only">
+        {value}
+        {suffix}
+      </span>
     </span>
   );
 }

@@ -35,8 +35,14 @@ export default function Sobre() {
         description="Somos uma equipe de desenvolvedores e designers dedicada a criar produtos digitais que fazem diferença para o negócio dos nossos clientes."
       />
 
-      <section className="container-x grid gap-12 pb-[72px] md:pb-24 lg:grid-cols-12 lg:gap-6 lg:pb-[120px]">
+      <section
+        aria-labelledby="quem-somos"
+        className="container-x grid gap-12 pb-[72px] md:pb-24 lg:grid-cols-12 lg:gap-6 lg:pb-[120px]"
+      >
         <Reveal className="lg:col-span-6">
+          <h2 id="quem-somos" className="label mb-6">
+            Quem somos
+          </h2>
           <div className="flex flex-col gap-5 text-lg leading-relaxed text-fog-300 md:text-xl">
             <p>
               Fundada em São Paulo, a <span className="text-fog-50">Nextgen</span> nasceu da vontade de
@@ -59,15 +65,20 @@ export default function Sobre() {
 
         <ul className="border-b border-white/[0.08] lg:col-span-5 lg:col-start-8">
           {pillars.map((pillar, index) => (
-            <Reveal key={pillar.title} delay={index * 0.08}>
-              <li className="grid grid-cols-[32px_minmax(0,1fr)] gap-x-3.5 gap-y-2 border-t border-white/[0.08] py-6 lg:grid-cols-[48px_minmax(0,1fr)]">
-                <span className="pt-1.5 font-mono text-xs text-fog-500">
+            <li key={pillar.title}>
+              <Reveal
+                delay={index * 0.08}
+                className="grid grid-cols-[32px_minmax(0,1fr)] gap-x-3.5 gap-y-2 border-t border-white/[0.08] py-6 lg:grid-cols-[48px_minmax(0,1fr)]"
+              >
+                <span aria-hidden="true" className="pt-1.5 font-mono text-xs text-fog-500">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <h3 className="text-2xl font-medium tracking-[-0.02em]">{pillar.title}</h3>
-                <p className="col-start-2 text-[15px] leading-relaxed text-fog-400">{pillar.description}</p>
-              </li>
-            </Reveal>
+                <p className="col-start-2 text-base leading-relaxed text-fog-400 md:text-[15px]">
+                  {pillar.description}
+                </p>
+              </Reveal>
+            </li>
           ))}
         </ul>
       </section>

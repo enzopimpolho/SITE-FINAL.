@@ -14,30 +14,34 @@ export default function WhyUsSection({ label = "(03) — Por que a Nextgen" }: W
           Tecnologia, processo e <span className="serif-em">proximidade.</span>
         </SectionIntro>
 
-        <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+        <ul className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {differentials.map((item, index) => {
             const Icon = item.icon;
             return (
-              <Reveal key={item.title} delay={index * 0.08}>
-                <div className="flex flex-col gap-2.5 border-t border-white/[0.12] pt-[22px] lg:gap-4 lg:pt-7">
-                  <div className="flex items-center justify-between text-accent-ink">
-                    <span className="hidden font-mono text-xs text-fog-500 lg:inline">
+              <li key={item.title}>
+                <Reveal delay={index * 0.08}>
+                  <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2.5 border-t border-white/[0.12] pt-[22px] lg:gap-y-4 lg:pt-7">
+                    <span aria-hidden="true" className="hidden font-mono text-xs text-fog-500 lg:block">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <h3 className="text-[22px] font-medium tracking-[-0.02em] text-fog-50 lg:hidden">
+                    <Icon
+                      size={22}
+                      strokeWidth={1.7}
+                      aria-hidden="true"
+                      className="col-start-2 row-start-1 text-accent-ink"
+                    />
+                    <h3 className="col-start-1 row-start-1 text-[22px] font-medium tracking-[-0.02em] lg:col-span-2 lg:row-start-2 lg:text-2xl">
                       {item.title}
                     </h3>
-                    <Icon size={22} strokeWidth={1.7} aria-hidden="true" />
+                    <p className="col-span-2 text-base leading-relaxed text-fog-400 lg:text-[15.5px]">
+                      {item.description}
+                    </p>
                   </div>
-                  <h3 className="hidden text-2xl font-medium tracking-[-0.02em] lg:block">{item.title}</h3>
-                  <p className="text-[15px] leading-relaxed text-fog-400 lg:text-[15.5px]">
-                    {item.description}
-                  </p>
-                </div>
-              </Reveal>
+                </Reveal>
+              </li>
             );
           })}
-        </div>
+        </ul>
       </div>
     </section>
   );

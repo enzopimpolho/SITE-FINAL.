@@ -20,12 +20,15 @@ export default function Servicos() {
         description="Da vitrine institucional ao sistema mais robusto, a Nextgen entrega tecnologia sob medida com foco em performance e resultado."
       />
 
-      <section className="container-x pb-[72px] md:pb-24 lg:pb-[120px]">
-        <div className="border-b border-white/[0.08]">
+      <section aria-labelledby="servicos-lista" className="container-x pb-[72px] md:pb-24 lg:pb-[120px]">
+        <h2 id="servicos-lista" className="label mb-6">
+          O que entregamos
+        </h2>
+        <ul className="border-b border-white/[0.08]">
           {services.map((service, index) => (
             <ServiceRow key={service.title} service={service} index={index} showDetails />
           ))}
-        </div>
+        </ul>
       </section>
 
       <section className="bg-ink-900">

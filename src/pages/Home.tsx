@@ -1,16 +1,18 @@
-import Hero from "../sections/Hero";
-import TrustMarquee from "../components/TrustMarquee";
-import ServicesSection from "../sections/ServicesSection";
-import PortfolioSection from "../sections/PortfolioSection";
-import WhyUsSection from "../sections/WhyUsSection";
-import ProcessSection from "../sections/ProcessSection";
-import TestimonialsSection from "../sections/TestimonialsSection";
-import ContactSection from "../sections/ContactSection";
+import ShaderHero from "@/sections/ShaderHero";
+import VideoShowcase from "@/sections/VideoShowcase";
+import TrustMarquee from "@/components/TrustMarquee";
+import ServicesSection from "@/sections/ServicesSection";
+import PortfolioSection from "@/sections/PortfolioSection";
+import WhyUsSection from "@/sections/WhyUsSection";
+import ProcessSection from "@/sections/ProcessSection";
+import TestimonialsSection from "@/sections/TestimonialsSection";
+import ContactSection from "@/sections/ContactSection";
 
 export default function Home() {
   return (
     <>
-      <Hero />
+      <ShaderHero />
+      <VideoShowcase />
       <TrustMarquee />
       <ServicesSection />
       <PortfolioSection />

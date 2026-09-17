@@ -52,14 +52,14 @@ export default function ContactSection({
       </Reveal>
 
       <Reveal delay={0.1} className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
-        <ContactForm />
+        <ContactForm headingLevel={headingLevel === "h1" ? "h2" : "h3"} />
       </Reveal>
 
       <Reveal delay={0.15} className="self-start border-b border-white/[0.08] lg:col-start-1 lg:row-start-2">
-        <ul>
-          {items.map(({ icon: Icon, label, value, href }) => (
+        <ul aria-label="Outras formas de contato">
+          {items.map(({ icon: Icon, label: itemLabel, value, href }) => (
             <li
-              key={label}
+              key={itemLabel}
               className="flex flex-col gap-1 border-t border-white/[0.08] py-4 lg:h-16 lg:flex-row lg:items-center lg:gap-4 lg:py-0"
             >
               <Icon
@@ -68,18 +68,19 @@ export default function ContactSection({
                 className="hidden shrink-0 text-accent-ink lg:block"
                 aria-hidden="true"
               />
-              <span className="label text-fog-500 lg:w-24 lg:shrink-0">{label}</span>
+              <span className="label text-fog-500 lg:w-24 lg:shrink-0">{itemLabel}</span>
               {href ? (
                 <a
                   href={href}
                   target={href.startsWith("http") ? "_blank" : undefined}
                   rel={href.startsWith("http") ? "noreferrer" : undefined}
-                  className="text-[15px] text-fog-100 transition-colors hover:text-accent-ink"
+                  className="-my-1 py-1 text-base text-fog-100 transition-colors hover:text-accent-ink lg:text-[15px]"
                 >
                   {value}
+                  {href.startsWith("http") && <span className="sr-only"> (abre em nova aba)</span>}
                 </a>
               ) : (
-                <span className="text-[15px] text-fog-100">{value}</span>
+                <span className="text-base text-fog-100 lg:text-[15px]">{value}</span>
               )}
             </li>
           ))}
