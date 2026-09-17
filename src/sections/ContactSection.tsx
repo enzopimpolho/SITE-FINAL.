@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Mail, MessageCircle, User } from "lucide-react";
 import ContactForm from "../components/ContactForm";
 import Reveal from "../components/Reveal";
 import { company } from "../data/company";
@@ -12,8 +12,7 @@ interface ContactItem {
 }
 
 const items: ContactItem[] = [
-  { icon: MapPin, label: "Endereço", value: "Av. Paulista, 1106 — Bela Vista, São Paulo - SP" },
-  { icon: Phone, label: "Telefone", value: company.phone, href: `tel:${company.phoneHref}` },
+  { icon: User, label: "Contato", value: company.contactName },
   {
     icon: MessageCircle,
     label: "WhatsApp",
