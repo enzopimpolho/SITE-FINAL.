@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "build": "tsc -b && vite build && npm run build:admin",
+    "preview": "vite preview",
+    "build:admin": "npm ci --prefix admin && npm run build --prefix admin",
+    "dev:admin": "npm run dev --prefix admin"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

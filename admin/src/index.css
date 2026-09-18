@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+/* Identidade "Verde Já" */
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", "Plus Jakarta Sans", ui-sans-serif, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-ink: #0b0f0d;
+  --color-deep: #0f1411;
+  --color-surface: #121815;
+  --color-surface-2: #18201c;
+  --color-line-soft: #1c2521;
+  --color-line: #26312b;
+  --color-line-strong: #33413a;
+  --color-fg: #ecf1ec;
+  --color-soft: #c9d3cd;
+  --color-mist: #9aa8a0;
+  --color-faint: #7c8a82;
+  --color-verde: #3ddc84;
+  --color-verde-hover: #62e59c;
+  --color-mata: #0f7a45;
+  --color-brasa: #ff8a4c;
+  --color-ambar: #ffc44c;
+  --color-paper: #f2f0e9;
+  --color-bubble: #1e4a33;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-ink text-fg font-sans antialiased;
+}
+
+/* Na camada components para que utilitários (hidden, w-full, h-*) possam sobrescrever. */
+@layer components {
+  .card {
+    @apply rounded-3xl border border-line bg-surface;
+  }
+
+  .input {
+    @apply h-12 w-full rounded-2xl border border-line-strong bg-ink px-4 text-[15px] font-semibold text-fg placeholder:font-medium placeholder:text-faint outline-none transition focus:border-verde focus:ring-2 focus:ring-verde/30 disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-verde px-5 text-sm font-bold text-ink transition hover:bg-verde-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-verde disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .btn-ghost {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-line-strong px-4 text-sm font-semibold text-fg transition hover:border-faint hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-verde disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .label {
+    @apply mb-2 block text-xs font-semibold text-mist;
+  }
+
+  .eyebrow {
+    @apply font-mono text-xs uppercase tracking-[0.16em] text-verde;
+  }
+
+  .badge-site {
+    @apply inline-flex h-6 items-center rounded-lg bg-verde/15 px-2 font-mono text-[10px] font-bold tracking-wider text-verde;
+  }
+
+  .display {
+    @apply font-display font-extrabold tracking-[-0.04em];
+  }
+}
+
+input[type="range"] {
+  accent-color: #3ddc84;
+}
