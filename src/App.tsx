@@ -1,6 +1,7 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import { MotionConfig } from "framer-motion";
+import { Analytics } from "@vercel/analytics/react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollProgress from "./components/ScrollProgress";
@@ -66,6 +67,7 @@ export default function App() {
           </main>
           {!isConceptSite && <Footer />}
           {!isConceptSite && <WhatsAppButton />}
+          <Analytics />
         </div>
       </MotionPauseProvider>
     </MotionConfig>
