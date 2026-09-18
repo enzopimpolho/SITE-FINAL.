@@ -9,6 +9,7 @@ import WhatsAppButton from "./components/WhatsAppButton";
 import Home from "./pages/Home";
 import Servicos from "./pages/Servicos";
 import Portfolio from "./pages/Portfolio";
+import Sistemas from "./pages/Sistemas";
 import Sobre from "./pages/Sobre";
 import Contato from "./pages/Contato";
 import NotFound from "./pages/NotFound";
@@ -59,6 +60,7 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/servicos" element={<Servicos />} />
               <Route path="/portfolio" element={<Portfolio />} />
+              <Route path="/sistemas" element={<Sistemas />} />
               <Route path="/sobre" element={<Sobre />} />
               <Route path="/contato" element={<Contato />} />
               <Route path="/projetos/:slug" element={<ProjectPage />} />
