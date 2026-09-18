@@ -2,7 +2,7 @@
 
 // server/auth.ts
 var COOKIE_SESSAO = "leadja_sessao";
-var VALIDADE_MS = 7 * 24 * 60 * 60 * 1e3;
+var VALIDADE_MS = 365 * 24 * 60 * 60 * 1e3;
 var cookie = (valor, maxAge) => `${COOKIE_SESSAO}=${valor}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`;
 function logout() {
   return { status: 204, body: null, setCookie: cookie("", 0) };

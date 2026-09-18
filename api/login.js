@@ -3,7 +3,7 @@
 // server/auth.ts
 import { createHmac, randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
 var COOKIE_SESSAO = "leadja_sessao";
-var VALIDADE_MS = 7 * 24 * 60 * 60 * 1e3;
+var VALIDADE_MS = 365 * 24 * 60 * 60 * 1e3;
 var config = () => ({
   hash: process.env.LEADJA_ADMIN_HASH,
   segredo: process.env.LEADJA_SESSION_SECRET

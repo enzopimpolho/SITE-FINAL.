@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { LogOut } from 'lucide-react';
+import { ArrowLeft, LogOut } from 'lucide-react';
 import type { Lead } from './types';
 import { sampleLeads } from './data/sampleLeads';
 import { Dashboard } from './components/Dashboard';
@@ -29,6 +29,14 @@ export default function App() {
 
   return (
     <>
+      {!IS_PREVIEW && (
+        <a
+          href="/"
+          className="fixed bottom-4 left-24 z-50 flex items-center gap-1.5 rounded-full border border-line bg-surface/90 px-3 py-1.5 text-xs font-medium text-mist backdrop-blur transition hover:text-fg"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" /> Voltar ao site
+        </a>
+      )}
       {!IS_PREVIEW && (
         <button
           type="button"

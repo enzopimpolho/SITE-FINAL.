@@ -3,7 +3,8 @@
 import { createHmac, randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
 
 export const COOKIE_SESSAO = 'leadja_sessao';
-const VALIDADE_MS = 7 * 24 * 60 * 60 * 1000;
+// 1 ano: o administrador digita a senha uma única vez por aparelho
+const VALIDADE_MS = 365 * 24 * 60 * 60 * 1000;
 
 interface Config {
   hash?: string;

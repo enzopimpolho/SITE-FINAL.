@@ -77,7 +77,12 @@ export default function Footer() {
 
       <div className="flex flex-col gap-1 pr-16 text-xs text-fog-400 md:flex-row md:justify-between md:text-[13px]">
         <p>© {year} Nextgen. Todos os direitos reservados.</p>
-        <p>Feito em São Paulo, SP.</p>
+        <p>
+          Feito em São Paulo, SP. ·{" "}
+          <Link to="/entrar" className="transition-colors hover:text-fog-200">
+            Área restrita
+          </Link>
+        </p>
       </div>
     </footer>
   );

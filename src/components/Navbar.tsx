@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Lock } from "lucide-react";
+import { useAdmin } from "../lib/admin";
 import Logo from "./Logo";
 import { navLinks } from "../data/nav";
 
@@ -11,6 +12,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { pathname } = useLocation();
   const toggleRef = useRef<HTMLButtonElement>(null);
+  const admin = useAdmin();
 
   useEffect(() => {
     setIsOpen(false);
@@ -47,6 +49,17 @@ export default function Navbar() {
                 </NavLink>
               </li>
             ))}
+            {admin && (
+              <li>
+                <a
+                  href="/admin"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-accent-ink/40 px-3 py-1.5 text-accent-ink transition-colors duration-300 hover:border-accent-ink"
+                >
+                  <Lock size={13} aria-hidden="true" />
+                  LeadJá
+                </a>
+              </li>
+            )}
           </ul>
         </nav>
 
@@ -105,6 +118,17 @@ export default function Navbar() {
                   </NavLink>
                 </li>
               ))}
+              {admin && (
+                <li>
+                  <a
+                    href="/admin"
+                    className="flex items-center gap-3 border-b border-white/[0.08] py-4 text-2xl font-medium tracking-[-0.02em] text-accent-ink"
+                  >
+                    <Lock size={18} aria-hidden="true" />
+                    LeadJá · painel admin
+                  </a>
+                </li>
+              )}
             </ul>
             <Link to="/contato" className="btn-primary mt-6 w-full">
               Solicitar orçamento
