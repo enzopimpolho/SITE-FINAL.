@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, LogOut } from 'lucide-react';
 import type { Lead } from './types';
-import { sampleLeads } from './data/sampleLeads';
 import { Dashboard } from './components/Dashboard';
 import { Landing } from './components/Landing';
 import { ToastStack, useToasts } from './components/Toast';
@@ -9,11 +8,31 @@ import { IS_PREVIEW } from './lib/preview';
 import { AdminLogin } from './components/AdminLogin';
 import { sair, sessaoAtiva } from './lib/api';
 
+// Leads reais ficam salvos neste navegador (não há banco de dados no LeadJá).
+const CHAVE_LEADS = 'leadja:leads';
+
+function carregarLeads(): Lead[] {
+  try {
+    const salvo = localStorage.getItem(CHAVE_LEADS);
+    return salvo ? (JSON.parse(salvo) as Lead[]) : [];
+  } catch {
+    return [];
+  }
+}
+
 export default function App() {
   const [view, setView] = useState<'landing' | 'app'>('app');
-  const [leads, setLeads] = useState<Lead[]>(sampleLeads);
+  const [leads, setLeads] = useState<Lead[]>(carregarLeads);
   const { toasts, notify, dismiss } = useToasts();
   const [acesso, setAcesso] = useState<'verificando' | 'negado' | 'ok'>('verificando');
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(CHAVE_LEADS, JSON.stringify(leads));
+    } catch {
+      // armazenamento indisponível (modo privado): segue só em memória
+    }
+  }, [leads]);
 
   useEffect(() => {
     sessaoAtiva().then((ok) => setAcesso(ok ? 'ok' : 'negado'));
