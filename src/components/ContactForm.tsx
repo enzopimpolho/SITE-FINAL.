@@ -27,7 +27,7 @@ function validate(form: FormState): Errors {
   return errors;
 }
 
-/** Texto enviado ao WhatsApp/e-mail, com os campos preenchidos. */
+/** Texto do e-mail, com os campos preenchidos. */
 function montarMensagem(form: FormState): string {
   return [
     "Olá, Nextgen! Vim pelo site.",
@@ -40,6 +40,12 @@ function montarMensagem(form: FormState): string {
   ]
     .filter((linha, i, todas) => linha !== "" || todas[i - 1] !== "")
     .join("\n");
+}
+
+/** Link mailto com destinatário, assunto e corpo já preenchidos. */
+function linkEmail(texto: string): string {
+  const assunto = encodeURIComponent("Orçamento — site Nextgen");
+  return `mailto:${company.email}?subject=${assunto}&body=${encodeURIComponent(texto)}`;
 }
 
 const cardClass =
@@ -55,6 +61,16 @@ export default function ContactForm({ headingLevel = "h3" }: ContactFormProps) {
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>("idle");
   const [ultimaMensagem, setUltimaMensagem] = useState("");
+  const [copiada, setCopiada] = useState(false);
+
+  async function copiarMensagem() {
+    try {
+      await navigator.clipboard.writeText(`Para: ${company.email}\n\n${ultimaMensagem}`);
+      setCopiada(true);
+    } catch {
+      setCopiada(false);
+    }
+  }
   const fieldRefs = useRef<Partial<Record<Field, HTMLInputElement | HTMLTextAreaElement | null>>>({});
   const successRef = useRef<HTMLHeadingElement>(null);
 
@@ -83,13 +99,17 @@ export default function ContactForm({ headingLevel = "h3" }: ContactFormProps) {
       return;
     }
 
-    // Sem servidor de e-mail: a mensagem vai pelo WhatsApp da Nextgen, já preenchida.
-    // Aberto dentro do submit (ação do usuário), para não ser bloqueado como pop-up.
+    // Sem servidor de e-mail: abre o aplicativo de e-mail do visitante com tudo preenchido.
     const texto = montarMensagem(form);
     setUltimaMensagem(texto);
-    window.open(`https://wa.me/${company.whatsappHref}?text=${encodeURIComponent(texto)}`, "_blank", "noopener");
+    setCopiada(false);
     setStatus("success");
     setForm(initialState);
+    try {
+      window.location.href = linkEmail(texto);
+    } catch {
+      // navegador bloqueou o mailto: a tela de sucesso já oferece o link e o endereço
+    }
   }
 
   const fieldProps = (field: Field) => ({
@@ -116,28 +136,23 @@ export default function ContactForm({ headingLevel = "h3" }: ContactFormProps) {
       <div role="status" className={`${cardClass} items-center justify-center text-center md:min-h-[560px]`}>
         <CheckCircle2 className="text-accent-ink" size={40} strokeWidth={1.5} aria-hidden="true" />
         <Heading ref={successRef} tabIndex={-1} className="text-2xl font-medium tracking-[-0.02em] outline-none">
-          Mensagem pronta no WhatsApp.
+          Mensagem pronta no seu e-mail.
         </Heading>
         <p className="max-w-sm text-base leading-relaxed text-fog-400">
-          Abrimos o WhatsApp da Nextgen com o seu texto. Falta só tocar em enviar por lá.
+          Abrimos seu aplicativo de e-mail com o texto preenchido. Falta só enviar por lá. Se nada abriu,
+          escreva para <span className="text-fog-100">{company.email}</span>.
         </p>
         <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-          <a
-            href={`https://wa.me/${company.whatsappHref}?text=${encodeURIComponent(ultimaMensagem)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary"
-          >
-            Abrir o WhatsApp de novo
-            <span className="sr-only"> (abre em nova aba)</span>
+          <a href={linkEmail(ultimaMensagem)} className="btn-primary">
+            Abrir o e-mail de novo
           </a>
-          <a
-            href={`mailto:${company.email}?subject=${encodeURIComponent("Orçamento — site Nextgen")}&body=${encodeURIComponent(ultimaMensagem)}`}
-            className="btn-ghost"
-          >
-            Prefiro enviar por e-mail
-          </a>
+          <button type="button" onClick={copiarMensagem} className="btn-ghost">
+            {copiada ? "Mensagem copiada" : "Copiar mensagem"}
+          </button>
         </div>
+        <p aria-live="polite" className="sr-only">
+          {copiada ? "Mensagem copiada para a área de transferência." : ""}
+        </p>
         <button type="button" onClick={() => setStatus("idle")} className="link-underline mt-2 text-sm text-fog-400 hover:text-fog-50">
           Escrever outra mensagem
         </button>
@@ -152,7 +167,7 @@ export default function ContactForm({ headingLevel = "h3" }: ContactFormProps) {
           Conte sobre o seu projeto
         </Heading>
         <p className="text-sm text-fog-400">
-          Ao enviar, a mensagem abre pronta no WhatsApp da Nextgen. Campos com <span aria-hidden="true">*</span>
+          Ao enviar, a mensagem abre pronta no seu e-mail. Campos com <span aria-hidden="true">*</span>
           <span className="sr-only">asterisco</span> são obrigatórios.
         </p>
       </div>
@@ -231,7 +246,7 @@ export default function ContactForm({ headingLevel = "h3" }: ContactFormProps) {
           </>
         ) : (
           <>
-            Enviar pelo WhatsApp
+            Enviar por e-mail
             <ArrowUpRight size={16} aria-hidden="true" />
           </>
         )}
