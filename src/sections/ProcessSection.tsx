@@ -4,7 +4,7 @@ import { processSteps } from "../data/process";
 /** Processo editorial: quatro etapas numeradas sobre uma linha, sem cards nem ícones. */
 export default function ProcessSection() {
   return (
-    <section aria-labelledby="processo-titulo" className="container-x section-y">
+    <section aria-labelledby="processo-titulo" className="container-x pb-20 pt-12 md:pb-28 md:pt-16 lg:pb-36 lg:pt-[72px]">
       <Reveal>
         <h2 id="processo-titulo" className="max-w-[760px] text-[34px] font-medium leading-[1.04] tracking-[-0.035em] md:text-5xl">
           Como trabalhamos.

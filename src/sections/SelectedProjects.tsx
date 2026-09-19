@@ -39,6 +39,24 @@ function Stack({ itens }: { itens: string[] }) {
   );
 }
 
+/** Metadados: status e ano, tipo e disciplina, tecnologias reais. */
+function Metadados({ p, className }: { p: Project; className: string }) {
+  return (
+    <dl className={`${className} font-mono text-[11px] uppercase leading-relaxed tracking-[0.08em] text-fog-500`}>
+      <dt className="sr-only">Status</dt>
+      <dd>
+        {p.status} · {p.year}
+      </dd>
+      <dt className="sr-only">Entrega</dt>
+      <dd className="whitespace-nowrap">{p.kind} — Design / Dev</dd>
+      <dt className="sr-only">Tecnologias</dt>
+      <dd className="mt-2">
+        <Stack itens={p.stack} />
+      </dd>
+    </dl>
+  );
+}
+
 function Info({ p }: { p: Project }) {
   return (
     <>
@@ -46,11 +64,7 @@ function Info({ p }: { p: Project }) {
         {p.name}
       </h3>
       <p className="mt-4 max-w-[380px] text-base leading-relaxed text-fog-400">{p.description}</p>
-      <p className="mt-6 font-mono text-[11px] uppercase leading-relaxed tracking-[0.08em] text-fog-500">
-        {p.kind} / {p.year}
-        <br />
-        <Stack itens={p.stack} />
-      </p>
+      <Metadados p={p} className="mt-6" />
       <span className="arrow-shift mt-8 inline-flex items-center gap-2 text-sm text-fog-300 transition-colors group-hover:text-fog-50">
         Ver projeto <ArrowUpRight size={15} aria-hidden="true" />
       </span>
@@ -76,11 +90,7 @@ function CaseStudy({ p, numero, composicao }: { p: Project; numero: number; comp
           </div>
           <div className="md:col-span-4 md:col-start-7">
             <p className="text-base leading-relaxed text-fog-400">{p.description}</p>
-            <p className="mt-4 font-mono text-[11px] uppercase leading-relaxed tracking-[0.08em] text-fog-500">
-              {p.kind} / {p.year}
-              <br />
-              <Stack itens={p.stack} />
-            </p>
+            <Metadados p={p} className="mt-4" />
           </div>
           <div className="md:col-span-2 md:flex md:justify-end">
             <span className="arrow-shift inline-flex items-center gap-2 text-sm text-fog-300 group-hover:text-fog-50">

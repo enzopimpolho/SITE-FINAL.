@@ -24,7 +24,7 @@ const cards: Card[] = projects.map((p, i) => ({
   titulo: p.name,
   thumbnail: p.image,
   className: tamanhos[i] ?? "md:col-span-1",
-  content: <Conteudo nome={p.name} categoria={p.category} slug={p.slug} descricao={p.description} />,
+  content: <Conteudo nome={p.name} categoria={`${p.category} · ${p.status} · ${p.year}`} slug={p.slug} descricao={p.description} />,
 }));
 
 /** Portfólio em Layout Grid: clique em um projeto para ampliar e abrir. */
