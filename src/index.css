@@ -82,7 +82,7 @@
   }
 
   .label {
-    @apply font-mono text-[11px] uppercase tracking-[0.16em] text-fog-500;
+    @apply font-mono text-[13px] tracking-normal text-fog-500;
   }
 
   /* segunda metade de títulos: mesmo tipo, tom mais frio (sem serif/itálico) */

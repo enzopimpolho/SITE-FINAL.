@@ -14,9 +14,11 @@ const TELAS = [
   { src: "/sistemas/erp-financeiro.webp", nome: "Financeiro" },
 ];
 
-const tipos = ["Dashboards", "CRMs", "Portais", "Painéis internos", "Integrações", "Ferramentas sob medida"];
+const tipos = ["Dashboards", "CRMs", "Painéis administrativos", "Portais", "Integrações", "Ferramentas internas"];
+// o que existe de fato por trás do Nextgen ERP
+const camadas = ["Web application", "Database", "Authentication", "API", "Analytics"];
 
-export default function SystemsShowcase({ label = "04 — Sistemas" }: { label?: string }) {
+export default function SystemsShowcase({ comLinkPagina = true }: { comLinkPagina?: boolean }) {
   const [atual, setAtual] = useState(0);
   const reduceMotion = useReducedMotion();
   const { paused } = useMotionPause();
@@ -24,71 +26,95 @@ export default function SystemsShowcase({ label = "04 — Sistemas" }: { label?:
   // troca lenta entre telas reais; parada com movimento reduzido ou pausa global
   useEffect(() => {
     if (reduceMotion || paused) return;
-    const t = setInterval(() => setAtual((i) => (i + 1) % TELAS.length), 5000);
+    const t = setInterval(() => setAtual((i) => (i + 1) % TELAS.length), 6000);
     return () => clearInterval(t);
   }, [reduceMotion, paused]);
 
-  return (
-    <section aria-labelledby="sistemas-titulo" className="section-y overflow-hidden">
-      <div className="container-x grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
-        <Reveal className="lg:col-span-7 lg:-ml-4 xl:-ml-12">
-          <figure>
-            <div className="relative aspect-[1600/964] overflow-hidden rounded-md border border-white/[0.1] bg-ink-900 shadow-[0_40px_120px_-40px_rgba(47,91,255,0.25)]">
-              <AnimatePresence initial={false}>
-                <motion.img
-                  key={TELAS[atual]!.src}
-                  src={TELAS[atual]!.src}
-                  alt={`Tela de ${TELAS[atual]!.nome} do Nextgen ERP`}
-                  width={1600}
-                  height={964}
-                  loading="lazy"
-                  decoding="async"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 1.2 }}
-                  className="absolute inset-0 h-full w-full object-cover object-left-top"
-                />
-              </AnimatePresence>
-            </div>
-            <figcaption className="mt-4 flex flex-wrap items-center justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-fog-500">
-              <span>Nextgen ERP — {TELAS[atual]!.nome}</span>
-              <span className="flex gap-2" aria-hidden="true">
-                {TELAS.map((t, i) => (
-                  <span key={t.nome} className={`h-px w-6 transition-colors duration-500 ${i === atual ? "bg-accent-ink" : "bg-white/15"}`} />
-                ))}
-              </span>
-            </figcaption>
-          </figure>
-        </Reveal>
+  const tela = TELAS[atual]!;
 
-        <Reveal delay={0.1} className="lg:col-span-5">
-          <p className="label mb-5">{label}</p>
-          <h2 id="sistemas-titulo" className="text-[34px] font-medium leading-[1.04] tracking-[-0.035em] md:text-5xl">
-            Sistemas feitos <span className="text-fog-500">para o seu processo.</span>
+  return (
+    <section aria-labelledby="sistemas-titulo" className="section-y">
+      <div className="container-x grid gap-10 lg:grid-cols-12">
+        <Reveal className="lg:col-span-6">
+          <h2 id="sistemas-titulo" className="text-[34px] font-medium leading-[1.04] tracking-[-0.035em] md:text-5xl lg:text-[64px]">
+            Sistemas feitos
+            <br /> <span className="text-fog-500">para o seu processo.</span>
           </h2>
-          <p className="mt-5 max-w-[440px] text-base leading-relaxed text-fog-400">
+        </Reveal>
+        <Reveal delay={0.08} className="lg:col-span-5 lg:col-start-8 lg:self-end">
+          <p className="max-w-[440px] text-base leading-relaxed text-fog-400">
             Não fazemos só landing pages. O Nextgen ERP — pedidos, estoque, logística e financeiro em um só
             sistema — é um exemplo do que construímos.
           </p>
-          <ul className="mt-8 grid grid-cols-2 border-t border-white/[0.08]">
-            {tipos.map((t, i) => (
-              <li key={t} className="flex items-baseline gap-3 border-b border-white/[0.08] py-3 text-[15px] text-fog-200">
-                <span className="font-mono text-[10px] text-fog-600">{String(i + 1).padStart(2, "0")}</span>
-                {t}
-              </li>
+          <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-[15px] text-fog-200">
+            {tipos.map((t) => (
+              <li key={t}>{t}</li>
             ))}
           </ul>
-          <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3">
-            <a href={DEMO_ERP} target="_blank" rel="noopener noreferrer" className="arrow-shift link-underline flex items-center gap-2 text-sm text-fog-50">
-              Abrir demonstração do ERP <ArrowUpRight size={14} aria-hidden="true" />
-              <span className="sr-only">(abre em nova aba)</span>
-            </a>
+        </Reveal>
+      </div>
+
+      {/* o dashboard é o protagonista: largura total do container */}
+      <Reveal className="container-x mt-14 md:mt-20">
+        <figure>
+          <div className="relative aspect-[4/5] overflow-hidden rounded-md border border-white/[0.1] bg-ink-900 sm:aspect-[1600/964]">
+            <AnimatePresence initial={false}>
+              <motion.img
+                key={tela.src}
+                src={tela.src}
+                alt={`Tela de ${tela.nome} do Nextgen ERP`}
+                width={1600}
+                height={964}
+                loading="lazy"
+                decoding="async"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.8 }}
+                className="absolute inset-0 h-full w-full object-cover object-left-top"
+              />
+            </AnimatePresence>
+          </div>
+          <figcaption className="mt-4 flex flex-wrap items-center justify-between gap-4 font-mono text-xs text-fog-500">
+            <span>
+              Nextgen ERP — {tela.nome}
+              <span className="text-fog-600"> · dados fictícios</span>
+            </span>
+            <span className="flex gap-1.5">
+              {TELAS.map((t, i) => (
+                <button
+                  key={t.nome}
+                  type="button"
+                  onClick={() => setAtual(i)}
+                  aria-label={`Mostrar tela de ${t.nome}`}
+                  aria-pressed={i === atual}
+                  className="flex h-6 items-center"
+                >
+                  <span className={`block h-px w-7 transition-colors duration-500 ${i === atual ? "bg-fog-50" : "bg-white/20"}`} />
+                </button>
+              ))}
+            </span>
+          </figcaption>
+        </figure>
+      </Reveal>
+
+      <div className="container-x mt-10 flex flex-col gap-6 border-t border-white/[0.08] pt-6 md:flex-row md:items-center md:justify-between">
+        <ul className="flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs uppercase tracking-[0.1em] text-fog-500">
+          {camadas.map((c) => (
+            <li key={c}>{c}</li>
+          ))}
+        </ul>
+        <div className="flex flex-wrap gap-x-6 gap-y-3">
+          <a href={DEMO_ERP} target="_blank" rel="noopener noreferrer" className="arrow-shift link-underline flex items-center gap-2 text-sm text-fog-50">
+            Abrir demonstração <ArrowUpRight size={14} aria-hidden="true" />
+            <span className="sr-only">(abre em nova aba)</span>
+          </a>
+          {comLinkPagina && (
             <Link to="/sistemas" className="arrow-shift link-underline flex items-center gap-2 text-sm text-fog-400 hover:text-fog-50">
               Sobre os sistemas <ArrowRight size={14} aria-hidden="true" />
             </Link>
-          </div>
-        </Reveal>
+          )}
+        </div>
       </div>
     </section>
   );

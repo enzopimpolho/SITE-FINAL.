@@ -7,43 +7,44 @@ const camadas = [
   { nome: "Integrations", texto: "WhatsApp, pagamentos, APIs e automações." },
 ];
 
-/** Seção técnica: camadas da stack em linhas, sem cards. */
-export default function TechLayers({ label = "02 — Engenharia" }: { label?: string }) {
+/** Engenharia: título fixo à esquerda, camadas da stack em linhas à direita. */
+export default function TechLayers() {
   return (
-    <section aria-labelledby="camadas-titulo" className="relative overflow-hidden border-y border-white/[0.06] bg-[#030408]">
-      <div aria-hidden="true" className="grid-bg absolute inset-0 [mask-image:radial-gradient(ellipse_at_70%_20%,black,transparent_70%)]" />
-      <div className="container-x section-y relative">
-        <Reveal>
-          <p className="label mb-5">{label}</p>
-          <h2
-            id="camadas-titulo"
-            className="max-w-[1000px] text-[34px] font-medium leading-[1.04] tracking-[-0.035em] md:text-5xl lg:text-[64px]"
-          >
-            Não fazemos apenas páginas. <span className="text-fog-500">Construímos a tecnologia por trás delas.</span>
-          </h2>
-        </Reveal>
+    <section aria-labelledby="camadas-titulo" className="relative border-y border-white/[0.06] bg-[#030408]">
+      <div aria-hidden="true" className="grid-bg absolute inset-0 [mask-image:linear-gradient(to_right,black,transparent_60%)]" />
+      <div className="container-x section-y relative grid gap-14 lg:grid-cols-12 lg:gap-10">
+        <div className="lg:col-span-5">
+          <Reveal className="lg:sticky lg:top-32">
+            <h2
+              id="camadas-titulo"
+              className="text-[34px] font-medium leading-[1.04] tracking-[-0.035em] md:text-5xl lg:text-[56px]"
+            >
+              Não fazemos apenas páginas.
+              <span className="mt-2 block text-fog-500">Construímos a tecnologia por trás delas.</span>
+            </h2>
+          </Reveal>
+        </div>
 
-        <ol className="mt-14 border-b border-white/[0.08] md:mt-20">
+        <ol className="border-b border-white/[0.08] lg:col-span-6 lg:col-start-7">
           {camadas.map((c, i) => (
-            <li key={c.nome}>
-              <Reveal delay={i * 0.06}>
-                <div className="group relative grid gap-2 border-t border-white/[0.08] py-7 transition-colors duration-500 hover:bg-white/[0.015] md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:items-baseline md:gap-8 md:py-9">
-                  {/* a linha superior "acende" no hover */}
-                  <span
-                    aria-hidden="true"
-                    className="absolute -top-px left-0 h-px w-full origin-left scale-x-0 bg-accent/70 transition-transform duration-700 ease-out-expo group-hover:scale-x-100 motion-reduce:transition-none"
-                  />
-                  <h3 className="flex items-baseline gap-4 font-mono text-sm uppercase tracking-[0.14em] text-fog-100 transition-transform duration-500 ease-out-expo group-hover:translate-x-1.5 md:text-[15px]">
-                    <span className="text-fog-600 transition-colors group-hover:text-accent-ink">
-                      {String(i + 1).padStart(2, "0")} /
-                    </span>
-                    {c.nome}
-                  </h3>
-                  <p className="text-lg leading-snug text-fog-400 transition-colors duration-500 group-hover:text-fog-100 md:text-2xl md:tracking-[-0.015em]">
-                    {c.texto}
-                  </p>
-                </div>
-              </Reveal>
+            <li
+              key={c.nome}
+              className="group relative border-t border-white/[0.08] py-8 transition-colors duration-500 hover:border-white/25 md:py-10"
+            >
+              <div className="flex items-center gap-3 font-mono text-[13px] uppercase tracking-[0.1em]">
+                <span className="text-fog-50 opacity-40 transition-opacity duration-500 group-hover:opacity-100">
+                  {String(i + 1).padStart(2, "0")} /
+                </span>
+                <h3 className="text-fog-200">{c.nome}</h3>
+                {/* indicador azul discreto no hover */}
+                <span
+                  aria-hidden="true"
+                  className="ml-auto h-1.5 w-1.5 bg-accent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                />
+              </div>
+              <p className="mt-4 text-xl leading-snug tracking-[-0.015em] text-fog-400 transition-[color,transform] duration-500 ease-out-expo group-hover:translate-x-1 group-hover:text-fog-50 md:text-[26px] motion-reduce:transform-none">
+                {c.texto}
+              </p>
             </li>
           ))}
         </ol>

@@ -47,8 +47,8 @@ export default function Navbar() {
         isOpen
           ? "border-white/[0.07] bg-ink-950"
           : solido
-            ? "border-white/[0.07] bg-ink-950/75 backdrop-blur-md"
-            : "border-transparent bg-transparent"
+            ? "border-white/[0.07] bg-ink-950/80 backdrop-blur-md"
+            : "border-white/[0.05] bg-ink-950/30 backdrop-blur-sm"
       }`}
     >
       <div className="container-x flex h-16 items-center justify-between gap-6">
@@ -76,7 +76,7 @@ export default function Navbar() {
             // /admin é outro app (fora do React Router): link comum
             <a
               href="/admin"
-              className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fog-400 transition-colors hover:text-accent-ink"
+              className="flex items-center gap-1.5 font-mono text-xs text-fog-400 transition-colors hover:text-accent-ink"
             >
               <Lock size={12} aria-hidden="true" />
               LeadJá
@@ -139,7 +139,7 @@ export default function Navbar() {
                 <li>
                   <a
                     href="/admin"
-                    className="flex items-center gap-3 border-b border-white/[0.07] py-5 font-mono text-sm uppercase tracking-[0.14em] text-accent-ink"
+                    className="flex items-center gap-3 border-b border-white/[0.07] py-5 font-mono text-sm text-accent-ink"
                   >
                     <Lock size={14} aria-hidden="true" />
                     LeadJá · painel admin

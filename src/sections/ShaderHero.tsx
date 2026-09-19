@@ -42,37 +42,24 @@ export default function ShaderHero() {
       {/* overlays: escuro à esquerda (texto), vídeo visível à direita; topo e base fecham no fundo */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,10,0.96)_0%,rgba(5,6,10,0.8)_38%,rgba(5,6,10,0.3)_72%,rgba(5,6,10,0.45)_100%)] max-md:bg-[linear-gradient(90deg,rgba(5,6,10,0.9)_0%,rgba(5,6,10,0.7)_100%)]"
+        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,10,0.97)_0%,rgba(5,6,10,0.86)_34%,rgba(5,6,10,0.25)_70%,rgba(5,6,10,0.3)_100%)] max-md:bg-[linear-gradient(90deg,rgba(5,6,10,0.9)_0%,rgba(5,6,10,0.7)_100%)]"
       />
       <div
         aria-hidden="true"
         className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,6,10,0.85)_0%,rgba(5,6,10,0)_22%,rgba(5,6,10,0)_62%,rgba(5,6,10,1)_100%)]"
       />
 
-      {/* metadados técnicos discretos */}
-      <div
-        aria-hidden="true"
-        className="container-x relative z-10 hidden justify-between pt-24 font-mono text-[11px] uppercase tracking-[0.16em] text-fog-500 md:flex"
-      >
-        <span>Nextgen® — Digital engineering</span>
-        <span>São Paulo / BR</span>
-      </div>
 
       <motion.div
         style={reduceMotion ? undefined : { y: contentY, opacity: contentOpacity }}
         className="container-x relative z-10 mt-auto pb-16 md:pb-20 lg:pb-24"
       >
-        <motion.div
-          {...entrada(0)}
-          aria-hidden="true"
-          className="mb-8 h-px w-16 origin-left bg-accent md:mb-10"
-        />
         <motion.h1
           id="hero-titulo"
           {...entrada(0.05)}
           className="max-w-[980px] text-[44px] font-medium leading-[0.98] tracking-[-0.045em] sm:text-6xl md:text-7xl lg:text-[104px]"
         >
-          Sites e sistemas que <span className="text-accent-ink">movem</span> negócios.
+          Sites e sistemas que <span className="text-[#aabdff]">movem negócios.</span>
         </motion.h1>
 
         <motion.p
@@ -94,9 +81,9 @@ export default function ShaderHero() {
 
         <motion.div
           {...entrada(0.45)}
-          className="mt-12 flex items-end justify-between gap-6 border-t border-white/[0.08] pt-5 md:mt-16"
+          className="mt-12 flex items-center justify-between gap-6 border-t border-white/[0.08] pt-4 max-md:pr-16 md:mt-16"
         >
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-fog-400 md:text-xs">
+          <p className="font-mono text-[13px] text-fog-400">
             {areas.join("  /  ")}
           </p>
           <button
@@ -104,10 +91,9 @@ export default function ShaderHero() {
             onClick={toggle}
             aria-pressed={paused}
             aria-label={paused ? "Retomar animações" : "Pausar animações"}
-            className="flex shrink-0 items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-fog-500 transition-colors hover:text-fog-50"
+            className="flex h-9 w-9 shrink-0 items-center justify-center text-fog-500 transition-colors hover:text-fog-50"
           >
             {paused ? <Play size={12} aria-hidden="true" /> : <Pause size={12} aria-hidden="true" />}
-            <span className="hidden sm:inline">{paused ? "Retomar" : "Pausar"}</span>
           </button>
         </motion.div>
       </motion.div>

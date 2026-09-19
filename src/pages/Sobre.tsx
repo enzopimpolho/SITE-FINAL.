@@ -16,9 +16,9 @@ export default function Sobre() {
         }
         description="Um estúdio de desenvolvimento em São Paulo que projeta e constrói sites, sistemas web e automações para empresas."
       />
-      <AboutStatement label="01 — Quem somos" comLink={false} />
-      <TechLayers label="02 — O que construímos" />
-      <ProcessSection label="03 — Processo" />
+      <AboutStatement comLink={false} />
+      <TechLayers />
+      <ProcessSection />
       <CtaBanner />
     </>
   );

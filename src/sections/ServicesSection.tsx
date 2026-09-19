@@ -2,99 +2,81 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import Reveal from "../components/Reveal";
 
-interface Area {
-  id: string;
+interface Linha {
   titulo: string;
   texto: string;
-  exemplos: string[];
+  itens: string[];
 }
 
-const principal: Area = {
-  id: "01",
-  titulo: "Sistemas web",
-  texto:
-    "Plataformas sob medida para o processo da sua empresa: do cadastro ao relatório, com regras de negócio, usuários e dados sob controle.",
-  exemplos: ["Dashboards", "CRM", "Painel administrativo", "Autenticação", "Banco de dados", "APIs"],
-};
-
-const secundarias: Area[] = [
+// Estrutura de ficha técnica: número / área / o que resolve / o que construímos
+const linhas: Linha[] = [
   {
-    id: "02",
-    titulo: "Sites & landing pages",
-    texto: "Páginas rápidas, bem escritas e pensadas para converter.",
-    exemplos: ["Institucional", "Landing pages", "Catálogo", "Portfólio", "Páginas de conversão"],
+    titulo: "Sistemas web",
+    texto: "Plataformas sob medida para processos que precisam de mais controle.",
+    itens: ["CRM", "Dashboards", "Painéis", "APIs"],
   },
   {
-    id: "03",
+    titulo: "Sites & landing pages",
+    texto: "Experiências rápidas, responsivas e desenvolvidas para conversão.",
+    itens: ["Institucional", "Landing pages", "Catálogos", "Portais"],
+  },
+  {
     titulo: "Automações & integrações",
-    texto: "Menos trabalho manual entre as ferramentas que você já usa.",
-    exemplos: ["WhatsApp", "APIs", "Workflows", "Pagamentos", "Ferramentas internas"],
+    texto: "Conectamos ferramentas e processos para reduzir trabalho manual.",
+    itens: ["WhatsApp", "APIs", "Pagamentos", "Automações"],
   },
 ];
 
-function Exemplos({ itens }: { itens: string[] }) {
-  return (
-    <ul className="flex flex-wrap gap-x-4 gap-y-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-fog-500">
-      {itens.map((item) => (
-        <li key={item}>{item}</li>
-      ))}
-    </ul>
-  );
-}
+const colunas = "md:grid-cols-[64px_minmax(0,5fr)_minmax(0,4fr)_minmax(0,3fr)]";
 
 export default function ServicesSection() {
   return (
     <section aria-labelledby="servicos-titulo" className="container-x section-y">
-      <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-        <Reveal>
-          <p className="label mb-5">01 — Serviços</p>
+      <div className="grid gap-8 lg:grid-cols-12">
+        <Reveal className="lg:col-span-9">
           <h2
             id="servicos-titulo"
-            className="max-w-[820px] text-[34px] font-medium leading-[1.04] tracking-[-0.035em] md:text-5xl lg:text-[64px]"
+            className="text-[34px] font-medium leading-[1.04] tracking-[-0.035em] md:text-5xl lg:text-[64px]"
           >
-            Construímos produtos digitais <span className="text-fog-500">do frontend ao backend.</span>
+            Construímos produtos digitais
+            <br className="hidden md:block" /> <span className="text-fog-500">do frontend ao backend.</span>
           </h2>
         </Reveal>
-        <Link to="/servicos" className="arrow-shift link-underline flex shrink-0 items-center gap-2 self-start text-sm text-fog-300 hover:text-fog-50 md:self-end">
-          Todos os serviços <ArrowRight size={14} aria-hidden="true" />
-        </Link>
-      </div>
-
-      <div className="mt-14 grid border-t border-white/[0.08] md:mt-20 lg:grid-cols-12">
-        <Reveal className="group relative flex min-h-[380px] flex-col justify-between gap-10 overflow-hidden border-b border-white/[0.08] py-10 lg:col-span-7 lg:min-h-[520px] lg:border-b-0 lg:border-r lg:py-12 lg:pr-14">
-          <div aria-hidden="true" className="grid-bg absolute inset-0 opacity-60 [mask-image:linear-gradient(to_bottom,black,transparent_80%)]" />
-          <div className="relative flex items-start justify-between">
-            <span className="font-mono text-xs text-fog-600">{principal.id}</span>
-            <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent-ink">Foco principal</span>
-          </div>
-          <div className="relative">
-            <h3 className="text-4xl font-medium tracking-[-0.035em] md:text-6xl">{principal.titulo}</h3>
-            <p className="mt-5 max-w-[480px] text-base leading-relaxed text-fog-400 md:text-lg">{principal.texto}</p>
-            <div className="mt-8">
-              <Exemplos itens={principal.exemplos} />
-            </div>
-          </div>
-        </Reveal>
-
-        <div className="flex flex-col lg:col-span-5">
-          {secundarias.map((area, i) => (
-            <Reveal
-              key={area.id}
-              delay={0.08 * (i + 1)}
-              className={`flex flex-1 flex-col justify-between gap-8 py-10 lg:py-12 lg:pl-12 ${i === 0 ? "border-b border-white/[0.08]" : ""}`}
-            >
-              <span className="font-mono text-xs text-fog-600">{area.id}</span>
-              <div>
-                <h3 className="text-2xl font-medium tracking-[-0.03em] md:text-[32px]">{area.titulo}</h3>
-                <p className="mt-3 max-w-[380px] text-[15px] leading-relaxed text-fog-400">{area.texto}</p>
-                <div className="mt-6">
-                  <Exemplos itens={area.exemplos} />
-                </div>
-              </div>
-            </Reveal>
-          ))}
+        <div className="flex lg:col-span-3 lg:items-end lg:justify-end">
+          <Link to="/servicos" className="arrow-shift link-underline flex items-center gap-2 text-sm text-fog-300 hover:text-fog-50">
+            Todos os serviços <ArrowRight size={14} aria-hidden="true" />
+          </Link>
         </div>
       </div>
+
+      {/* cabeçalho das colunas, só no desktop */}
+      <div className={`mt-16 hidden gap-8 pb-3 font-mono text-xs text-fog-600 md:mt-24 md:grid ${colunas}`} aria-hidden="true">
+        <span>#</span>
+        <span>Área</span>
+        <span>O que resolve</span>
+        <span>O que construímos</span>
+      </div>
+
+      <ol className="mt-10 border-b border-white/[0.08] md:mt-0">
+        {linhas.map((l, i) => (
+          <li key={l.titulo}>
+            <Reveal delay={i * 0.05}>
+              <div className={`group grid gap-3 border-t border-white/[0.08] py-8 transition-colors duration-500 hover:border-white/20 md:items-baseline md:gap-8 md:py-10 ${colunas}`}>
+                <span className="font-mono text-sm text-fog-600 transition-colors duration-500 group-hover:text-accent-ink">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="text-[28px] font-medium leading-tight tracking-[-0.03em] md:text-[40px]">{l.titulo}</h3>
+                <p className="max-w-[360px] text-base leading-relaxed text-fog-400">{l.texto}</p>
+                <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.08em] text-fog-300 md:mt-0 md:flex-col md:gap-1.5">
+                  {l.itens.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+          </li>
+        ))}
+      </ol>
     </section>
   );
 }

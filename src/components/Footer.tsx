@@ -50,7 +50,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="container-x flex flex-col gap-2 border-t border-white/[0.08] py-6 pr-20 font-mono text-[11px] uppercase tracking-[0.14em] text-fog-600 md:flex-row md:justify-between">
+      <div className="container-x flex flex-col gap-2 border-t border-white/[0.08] py-6 pr-20 font-mono text-xs text-fog-600 md:flex-row md:justify-between">
         <p>© {year} Nextgen</p>
         <p>
           São Paulo — Brasil ·{" "}

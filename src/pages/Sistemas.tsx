@@ -30,7 +30,7 @@ export default function Sistemas() {
         description="Conheça na prática um sistema que desenvolvemos. A demonstração é aberta, sem cadastro, com dados fictícios."
       />
 
-      <SystemsShowcase label="Nextgen ERP" />
+      <SystemsShowcase comLinkPagina={false} />
 
       <section aria-labelledby="modulos-titulo" className="container-x section-y">
         <div className="grid gap-10 lg:grid-cols-12">

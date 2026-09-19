@@ -3,55 +3,99 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Reveal from "../components/Reveal";
 import { projects, type Project } from "../data/projects";
 
-// Um de cada tipo: sistema, e-commerce e site de serviço
+// Um de cada tipo: sistema, e-commerce e site
 const DESTAQUES = ["gestao-pro", "urban-style", "bella-italia"];
 
-function CaseStudy({ projeto, numero, invertido }: { projeto: Project; numero: number; invertido: boolean }) {
-  return (
-    <Reveal>
-      <Link
-        to={`/projetos/${projeto.slug}`}
-        className="group grid gap-8 border-t border-white/[0.08] pt-8 md:pt-10 lg:grid-cols-12 lg:gap-12"
-      >
-        <div className={`lg:col-span-7 ${invertido ? "lg:order-2" : ""}`}>
-          <div className="overflow-hidden rounded-sm border border-white/[0.08] bg-ink-900">
-            <img
-              src={projeto.image}
-              alt={`Tela do projeto ${projeto.name}`}
-              width={projeto.imageWidth}
-              height={projeto.imageHeight}
-              loading="lazy"
-              decoding="async"
-              className="aspect-[4/3] w-full object-cover object-top brightness-[0.92] transition duration-700 ease-out-expo group-hover:scale-[1.01] group-hover:brightness-100"
-            />
-          </div>
-        </div>
+type Composicao = "imagem-esquerda" | "imagem-direita" | "largura-total";
+const COMPOSICOES: Composicao[] = ["imagem-esquerda", "imagem-direita", "largura-total"];
 
-        <div className={`flex flex-col justify-between gap-8 lg:col-span-5 ${invertido ? "lg:order-1" : ""}`}>
-          <div className="flex justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-fog-500">
-            <span>Project / {String(numero).padStart(3, "0")}</span>
-            <span>{projeto.year}</span>
-          </div>
-          <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent-ink">{projeto.category}</p>
-            <h3 className="mt-3 text-4xl font-medium tracking-[-0.04em] md:text-[56px] md:leading-none">{projeto.name}</h3>
-            <p className="mt-5 max-w-[420px] text-base leading-relaxed text-fog-400 md:text-lg">{projeto.description}</p>
-          </div>
-          <div className="flex items-end justify-between gap-6 border-t border-white/[0.08] pt-5">
-            <p className="font-mono text-[11px] uppercase leading-relaxed tracking-[0.12em] text-fog-500">
-              {projeto.stack.join(" · ")}
+function Imagem({ p, aspecto }: { p: Project; aspecto: string }) {
+  return (
+    <div className="overflow-hidden rounded-[4px] border border-white/[0.08] bg-ink-900">
+      <img
+        src={p.image}
+        alt={`Tela do projeto ${p.name}`}
+        width={p.imageWidth}
+        height={p.imageHeight}
+        loading="lazy"
+        decoding="async"
+        className={`${aspecto} w-full object-cover object-top brightness-[0.94] transition-[transform,filter] duration-700 ease-out-expo group-hover:scale-[1.01] group-hover:brightness-100 motion-reduce:transform-none`}
+      />
+    </div>
+  );
+}
+
+function Info({ p, numero }: { p: Project; numero: number }) {
+  return (
+    <>
+      <p className="font-mono text-xs uppercase tracking-[0.1em] text-fog-500">
+        {p.kind} / {p.year}
+      </p>
+      <h3 className="mt-3 text-4xl font-medium tracking-[-0.04em] transition-colors duration-500 group-hover:text-white md:text-5xl">
+        {p.name}
+      </h3>
+      <p className="mt-4 max-w-[380px] text-base leading-relaxed text-fog-400">{p.description}</p>
+      <p className="mt-6 font-mono text-xs uppercase leading-relaxed tracking-[0.08em] text-fog-500">
+        {p.stack.join(" · ")}
+      </p>
+      <span className="arrow-shift mt-8 inline-flex items-center gap-2 text-sm text-fog-300 transition-colors group-hover:text-fog-50">
+        Ver projeto {String(numero).padStart(2, "0")} <ArrowUpRight size={15} aria-hidden="true" />
+      </span>
+    </>
+  );
+}
+
+function CaseStudy({ p, numero, composicao }: { p: Project; numero: number; composicao: Composicao }) {
+  const indice = (
+    <span className="font-mono text-sm text-fog-600">{String(numero).padStart(2, "0")}</span>
+  );
+
+  if (composicao === "largura-total") {
+    return (
+      <Link to={`/projetos/${p.slug}`} className="group block">
+        {indice}
+        <div className="mt-5">
+          <Imagem p={p} aspecto="aspect-[4/3] md:aspect-[21/10]" />
+        </div>
+        <div className="mt-8 grid gap-6 md:grid-cols-12">
+          <div className="md:col-span-5">
+            <p className="font-mono text-xs uppercase tracking-[0.1em] text-fog-500">
+              {p.kind} / {p.year}
             </p>
-            <span className="arrow-shift flex shrink-0 items-center gap-2 text-sm text-fog-200 group-hover:text-fog-50">
+            <h3 className="mt-3 text-4xl font-medium tracking-[-0.04em] md:text-5xl">{p.name}</h3>
+          </div>
+          <div className="md:col-span-4 md:col-start-7">
+            <p className="text-base leading-relaxed text-fog-400">{p.description}</p>
+            <p className="mt-4 font-mono text-xs uppercase tracking-[0.08em] text-fog-500">{p.stack.join(" · ")}</p>
+          </div>
+          <div className="md:col-span-2 md:flex md:justify-end">
+            <span className="arrow-shift inline-flex items-center gap-2 text-sm text-fog-300 group-hover:text-fog-50">
               Ver projeto <ArrowUpRight size={15} aria-hidden="true" />
             </span>
           </div>
         </div>
       </Link>
-    </Reveal>
+    );
+  }
+
+  const direita = composicao === "imagem-direita";
+  return (
+    <Link to={`/projetos/${p.slug}`} className="group grid gap-8 lg:grid-cols-12 lg:gap-12">
+      <div className={`lg:col-span-8 ${direita ? "lg:order-2" : ""}`}>
+        <div className="mb-5 lg:hidden">{indice}</div>
+        <Imagem p={p} aspecto="aspect-[4/3] md:aspect-[16/10]" />
+      </div>
+      <div className={`flex flex-col lg:col-span-4 ${direita ? "lg:order-1" : ""}`}>
+        <div className="hidden lg:block">{indice}</div>
+        <div className="lg:mt-auto">
+          <Info p={p} numero={numero} />
+        </div>
+      </div>
+    </Link>
   );
 }
 
-/** Projetos grandes, em formato de estudo de caso (home). */
+/** Projetos grandes, em formato de estudo de caso, com composições diferentes (home). */
 export default function SelectedProjects() {
   const lista = DESTAQUES.map((slug) => projects.find((p) => p.slug === slug)).filter(
     (p): p is Project => Boolean(p),
@@ -59,13 +103,12 @@ export default function SelectedProjects() {
 
   return (
     <section id="projetos" aria-labelledby="projetos-titulo" className="container-x section-y">
-      <div className="mb-14 flex flex-col gap-6 md:mb-20 md:flex-row md:items-end md:justify-between">
+      <div className="mb-16 flex flex-col gap-6 md:mb-24 md:flex-row md:items-end md:justify-between">
         <Reveal>
-          <p className="label mb-5">03 — Projetos</p>
           <h2 id="projetos-titulo" className="text-[34px] font-medium leading-[1.04] tracking-[-0.035em] md:text-5xl lg:text-[64px]">
             Projetos selecionados.
           </h2>
-          <p className="mt-5 max-w-[460px] text-base leading-relaxed text-fog-400">
+          <p className="mt-5 max-w-[440px] text-base leading-relaxed text-fog-400">
             Sites e sistemas-conceito desenhados e desenvolvidos pela Nextgen, para segmentos diferentes.
           </p>
         </Reveal>
@@ -74,9 +117,11 @@ export default function SelectedProjects() {
         </Link>
       </div>
 
-      <div className="flex flex-col gap-20 md:gap-28">
+      <div className="flex flex-col gap-24 md:gap-40">
         {lista.map((p, i) => (
-          <CaseStudy key={p.slug} projeto={p} numero={projects.indexOf(p) + 1} invertido={i % 2 === 1} />
+          <Reveal key={p.slug}>
+            <CaseStudy p={p} numero={i + 1} composicao={COMPOSICOES[i] ?? "imagem-esquerda"} />
+          </Reveal>
         ))}
       </div>
     </section>

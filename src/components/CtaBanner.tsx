@@ -8,14 +8,15 @@ export default function CtaBanner() {
     <section aria-labelledby="cta-titulo" className="relative overflow-hidden border-t border-white/[0.06]">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-1/2 left-1/2 h-[80%] w-[90%] -translate-x-1/2 rounded-[50%] bg-accent/[0.12] blur-[120px]"
+        className="pointer-events-none absolute -bottom-1/2 left-1/2 h-[80%] w-[90%] -translate-x-1/2 rounded-[50%] bg-accent/[0.09] blur-[140px]"
       />
       <div className="container-x relative py-32 md:py-44 lg:py-56">
         <Reveal>
-          <h2 id="cta-titulo" className="text-[52px] font-medium leading-[0.95] tracking-[-0.05em] sm:text-7xl md:text-8xl xl:text-[136px]">
-            Tem uma ideia?
-            <br />
-            <span className="text-fog-500">Vamos construir.</span>
+          <h2 id="cta-titulo">
+            <span className="block text-2xl font-medium tracking-[-0.02em] text-fog-500 md:text-4xl">Tem uma ideia?</span>
+            <span className="mt-3 block whitespace-nowrap text-[clamp(40px,10.5vw,160px)] font-medium leading-[0.92] tracking-[-0.055em] md:mt-5">
+              Vamos construir.
+            </span>
           </h2>
         </Reveal>
         <Reveal delay={0.1} className="mt-10 flex flex-col gap-8 md:mt-14 md:flex-row md:items-end md:justify-between">

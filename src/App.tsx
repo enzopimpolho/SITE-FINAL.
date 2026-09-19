@@ -49,7 +49,7 @@ export default function App() {
         <div className="relative flex min-h-screen flex-col overflow-x-clip bg-ink-950 text-fog-50">
           <a
             href="#conteudo"
-            className="fixed left-4 top-4 z-[70] -translate-y-24 rounded-full bg-accent px-5 py-3 text-sm font-medium text-white transition-transform focus-visible:translate-y-0"
+            className="fixed left-4 top-4 z-[70] -translate-y-24 rounded-md bg-accent px-5 py-3 text-sm font-medium text-white transition-transform focus-visible:translate-y-0"
           >
             Pular para o conteúdo
           </a>
