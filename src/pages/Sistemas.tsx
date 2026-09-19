@@ -107,9 +107,7 @@ export default function Sistemas() {
               <Link to="/contato" className="btn-ghost">
                 Quero um sistema assim
               </Link>
-            </div>
-            <p className="mt-3 text-sm text-fog-500">Abre em nova aba · sem senha · somente leitura</p>
-          </Reveal>
+            </div>          </Reveal>
           <Reveal delay={0.1} className="lg:col-span-7">
             <PreviaPainel />
           </Reveal>
