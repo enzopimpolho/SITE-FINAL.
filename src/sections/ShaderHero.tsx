@@ -42,7 +42,7 @@ export default function ShaderHero() {
       {/* overlays: escuro à esquerda (texto), vídeo visível à direita; topo e base fecham no fundo */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,10,0.97)_0%,rgba(5,6,10,0.86)_34%,rgba(5,6,10,0.25)_70%,rgba(5,6,10,0.3)_100%)] max-md:bg-[linear-gradient(90deg,rgba(5,6,10,0.9)_0%,rgba(5,6,10,0.7)_100%)]"
+        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,10,0.97)_0%,rgba(5,6,10,0.86)_34%,rgba(5,6,10,0.18)_70%,rgba(5,6,10,0.22)_100%)] max-md:bg-[linear-gradient(90deg,rgba(5,6,10,0.9)_0%,rgba(5,6,10,0.7)_100%)]"
       />
       <div
         aria-hidden="true"
@@ -83,7 +83,7 @@ export default function ShaderHero() {
           {...entrada(0.45)}
           className="mt-12 flex items-center justify-between gap-6 border-t border-white/[0.08] pt-4 max-md:pr-16 md:mt-16"
         >
-          <p className="font-mono text-[13px] text-fog-400">
+          <p className="font-mono text-[13px] text-fog-500">
             {areas.join("  /  ")}
           </p>
           <button
@@ -91,7 +91,7 @@ export default function ShaderHero() {
             onClick={toggle}
             aria-pressed={paused}
             aria-label={paused ? "Retomar animações" : "Pausar animações"}
-            className="flex h-9 w-9 shrink-0 items-center justify-center text-fog-500 transition-colors hover:text-fog-50"
+            className="-mr-2 flex h-10 w-10 shrink-0 items-center justify-center text-fog-600 opacity-70 transition-[color,opacity] hover:text-fog-200 hover:opacity-100"
           >
             {paused ? <Play size={12} aria-hidden="true" /> : <Pause size={12} aria-hidden="true" />}
           </button>

@@ -38,7 +38,7 @@ export default function SystemsShowcase({ comLinkPagina = true }: { comLinkPagin
         <Reveal className="lg:col-span-6">
           <h2 id="sistemas-titulo" className="text-[34px] font-medium leading-[1.04] tracking-[-0.035em] md:text-5xl lg:text-[64px]">
             Sistemas feitos
-            <br /> <span className="text-fog-500">para o seu processo.</span>
+            <br /> <span className="text-fog-300">para o seu processo.</span>
           </h2>
         </Reveal>
         <Reveal delay={0.08} className="lg:col-span-5 lg:col-start-8 lg:self-end">
@@ -57,7 +57,7 @@ export default function SystemsShowcase({ comLinkPagina = true }: { comLinkPagin
       {/* o dashboard é o protagonista: largura total do container */}
       <Reveal className="container-x mt-14 md:mt-20">
         <figure>
-          <div className="relative aspect-[4/5] overflow-hidden rounded-md border border-white/[0.1] bg-ink-900 sm:aspect-[1600/964]">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-md border border-white/[0.08] bg-ink-900 sm:aspect-[1600/964]">
             <AnimatePresence initial={false}>
               <motion.img
                 key={tela.src}
@@ -99,11 +99,10 @@ export default function SystemsShowcase({ comLinkPagina = true }: { comLinkPagin
       </Reveal>
 
       <div className="container-x mt-10 flex flex-col gap-6 border-t border-white/[0.08] pt-6 md:flex-row md:items-center md:justify-between">
-        <ul className="flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs uppercase tracking-[0.1em] text-fog-500">
-          {camadas.map((c) => (
-            <li key={c}>{c}</li>
-          ))}
-        </ul>
+        <p className="font-mono text-[11px] uppercase leading-relaxed tracking-[0.1em] text-fog-600">
+          <span className="sr-only">Camadas do sistema: </span>
+          {camadas.join(" / ")}
+        </p>
         <div className="flex flex-wrap gap-x-6 gap-y-3">
           <a href={DEMO_ERP} target="_blank" rel="noopener noreferrer" className="arrow-shift link-underline flex items-center gap-2 text-sm text-fog-50">
             Abrir demonstração <ArrowUpRight size={14} aria-hidden="true" />

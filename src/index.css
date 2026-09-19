@@ -78,7 +78,7 @@
   }
 
   .section-y {
-    @apply py-[72px] md:py-24 lg:py-[120px];
+    @apply py-20 md:py-28 lg:py-36;
   }
 
   .label {

@@ -25,7 +25,7 @@ function Imagem({ p, aspecto }: { p: Project; aspecto: string }) {
   );
 }
 
-function Info({ p, numero }: { p: Project; numero: number }) {
+function Info({ p }: { p: Project }) {
   return (
     <>
       <p className="font-mono text-xs uppercase tracking-[0.1em] text-fog-500">
@@ -35,11 +35,11 @@ function Info({ p, numero }: { p: Project; numero: number }) {
         {p.name}
       </h3>
       <p className="mt-4 max-w-[380px] text-base leading-relaxed text-fog-400">{p.description}</p>
-      <p className="mt-6 font-mono text-xs uppercase leading-relaxed tracking-[0.08em] text-fog-500">
+      <p className="mt-6 font-mono text-[11px] uppercase leading-relaxed tracking-[0.08em] text-fog-600">
         {p.stack.join(" · ")}
       </p>
       <span className="arrow-shift mt-8 inline-flex items-center gap-2 text-sm text-fog-300 transition-colors group-hover:text-fog-50">
-        Ver projeto {String(numero).padStart(2, "0")} <ArrowUpRight size={15} aria-hidden="true" />
+        Ver projeto <ArrowUpRight size={15} aria-hidden="true" />
       </span>
     </>
   );
@@ -57,7 +57,7 @@ function CaseStudy({ p, numero, composicao }: { p: Project; numero: number; comp
         <div className="mt-5">
           <Imagem p={p} aspecto="aspect-[4/3] md:aspect-[21/10]" />
         </div>
-        <div className="mt-8 grid gap-6 md:grid-cols-12">
+        <div className="mt-10 grid gap-6 md:grid-cols-12">
           <div className="md:col-span-5">
             <p className="font-mono text-xs uppercase tracking-[0.1em] text-fog-500">
               {p.kind} / {p.year}
@@ -66,7 +66,7 @@ function CaseStudy({ p, numero, composicao }: { p: Project; numero: number; comp
           </div>
           <div className="md:col-span-4 md:col-start-7">
             <p className="text-base leading-relaxed text-fog-400">{p.description}</p>
-            <p className="mt-4 font-mono text-xs uppercase tracking-[0.08em] text-fog-500">{p.stack.join(" · ")}</p>
+            <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.08em] text-fog-600">{p.stack.join(" · ")}</p>
           </div>
           <div className="md:col-span-2 md:flex md:justify-end">
             <span className="arrow-shift inline-flex items-center gap-2 text-sm text-fog-300 group-hover:text-fog-50">
@@ -80,7 +80,7 @@ function CaseStudy({ p, numero, composicao }: { p: Project; numero: number; comp
 
   const direita = composicao === "imagem-direita";
   return (
-    <Link to={`/projetos/${p.slug}`} className="group grid gap-8 lg:grid-cols-12 lg:gap-12">
+    <Link to={`/projetos/${p.slug}`} className="group grid gap-8 lg:grid-cols-12 lg:gap-16">
       <div className={`lg:col-span-8 ${direita ? "lg:order-2" : ""}`}>
         <div className="mb-5 lg:hidden">{indice}</div>
         <Imagem p={p} aspecto="aspect-[4/3] md:aspect-[16/10]" />
@@ -88,7 +88,7 @@ function CaseStudy({ p, numero, composicao }: { p: Project; numero: number; comp
       <div className={`flex flex-col lg:col-span-4 ${direita ? "lg:order-1" : ""}`}>
         <div className="hidden lg:block">{indice}</div>
         <div className="lg:mt-auto">
-          <Info p={p} numero={numero} />
+          <Info p={p} />
         </div>
       </div>
     </Link>

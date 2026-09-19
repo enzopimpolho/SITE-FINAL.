@@ -50,33 +50,33 @@ export default function ServicesSection() {
       </div>
 
       {/* cabeçalho das colunas, só no desktop */}
-      <div className={`mt-16 hidden gap-8 pb-3 font-mono text-xs text-fog-600 md:mt-24 md:grid ${colunas}`} aria-hidden="true">
+      <div className={`mt-16 hidden gap-8 pb-4 font-mono text-[11px] text-fog-600 md:mt-24 md:grid ${colunas}`} aria-hidden="true">
         <span>#</span>
         <span>Área</span>
         <span>O que resolve</span>
         <span>O que construímos</span>
       </div>
 
-      <ol className="mt-10 border-b border-white/[0.08] md:mt-0">
+      <Reveal>
+      <ol className="mt-10 border-b border-white/[0.06] md:mt-0">
         {linhas.map((l, i) => (
           <li key={l.titulo}>
-            <Reveal delay={i * 0.05}>
-              <div className={`group grid gap-3 border-t border-white/[0.08] py-8 transition-colors duration-500 hover:border-white/20 md:items-baseline md:gap-8 md:py-10 ${colunas}`}>
-                <span className="font-mono text-sm text-fog-600 transition-colors duration-500 group-hover:text-accent-ink">
+            <div className={`group grid gap-3 border-t border-white/[0.06] py-9 transition-colors duration-500 hover:border-white/[0.16] md:items-baseline md:gap-8 md:py-12 ${colunas}`}>
+                <span className="font-mono text-xs text-fog-600 transition-colors duration-500 group-hover:text-fog-300">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <h3 className="text-[28px] font-medium leading-tight tracking-[-0.03em] md:text-[40px]">{l.titulo}</h3>
+                <h3 className="text-[28px] font-medium leading-tight tracking-[-0.03em] transition-transform duration-500 ease-out-expo group-hover:translate-x-1 md:text-[40px] motion-reduce:transform-none">{l.titulo}</h3>
                 <p className="max-w-[360px] text-base leading-relaxed text-fog-400">{l.texto}</p>
-                <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.08em] text-fog-300 md:mt-0 md:flex-col md:gap-1.5">
+                <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.08em] text-fog-400 md:mt-0 md:flex-col md:gap-1.5">
                   {l.itens.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
               </div>
-            </Reveal>
           </li>
         ))}
       </ol>
+      </Reveal>
     </section>
   );
 }

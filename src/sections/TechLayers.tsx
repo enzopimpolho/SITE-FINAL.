@@ -17,10 +17,10 @@ export default function TechLayers() {
           <Reveal className="lg:sticky lg:top-32">
             <h2
               id="camadas-titulo"
-              className="text-[34px] font-medium leading-[1.04] tracking-[-0.035em] md:text-5xl lg:text-[56px]"
+              className="text-[36px] font-medium leading-[1.02] tracking-[-0.04em] md:text-6xl lg:text-5xl xl:text-[68px]"
             >
               Não fazemos apenas páginas.
-              <span className="mt-2 block text-fog-500">Construímos a tecnologia por trás delas.</span>
+              <span className="mt-2 block">Construímos a tecnologia por trás delas.</span>
             </h2>
           </Reveal>
         </div>
@@ -29,7 +29,7 @@ export default function TechLayers() {
           {camadas.map((c, i) => (
             <li
               key={c.nome}
-              className="group relative border-t border-white/[0.08] py-8 transition-colors duration-500 hover:border-white/25 md:py-10"
+              className="group relative border-t border-white/[0.08] py-8 transition-colors duration-500 hover:border-white/[0.18] md:py-10"
             >
               <div className="flex items-center gap-3 font-mono text-[13px] uppercase tracking-[0.1em]">
                 <span className="text-fog-50 opacity-40 transition-opacity duration-500 group-hover:opacity-100">
@@ -39,10 +39,10 @@ export default function TechLayers() {
                 {/* indicador azul discreto no hover */}
                 <span
                   aria-hidden="true"
-                  className="ml-auto h-1.5 w-1.5 bg-accent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  className="ml-auto h-1 w-1 bg-accent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                 />
               </div>
-              <p className="mt-4 text-xl leading-snug tracking-[-0.015em] text-fog-400 transition-[color,transform] duration-500 ease-out-expo group-hover:translate-x-1 group-hover:text-fog-50 md:text-[26px] motion-reduce:transform-none">
+              <p className="mt-4 text-xl leading-snug tracking-[-0.015em] text-fog-400 transition-colors duration-500 group-hover:text-fog-100 md:text-[24px]">
                 {c.texto}
               </p>
             </li>

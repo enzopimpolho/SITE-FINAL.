@@ -13,9 +13,9 @@ export default function CtaBanner() {
       <div className="container-x relative py-32 md:py-44 lg:py-56">
         <Reveal>
           <h2 id="cta-titulo">
-            <span className="block text-2xl font-medium tracking-[-0.02em] text-fog-500 md:text-4xl">Tem uma ideia?</span>
-            <span className="mt-3 block whitespace-nowrap text-[clamp(40px,10.5vw,160px)] font-medium leading-[0.92] tracking-[-0.055em] md:mt-5">
-              Vamos construir.
+            <span className="block text-xl font-medium tracking-[-0.02em] text-fog-500 md:text-3xl">Tem uma ideia?</span>
+            <span className="mt-3 block text-[64px] font-medium leading-[0.92] tracking-[-0.055em] sm:whitespace-nowrap sm:text-[clamp(64px,10.5vw,160px)] md:mt-5">
+              Vamos construir<span className="text-accent">.</span>
             </span>
           </h2>
         </Reveal>

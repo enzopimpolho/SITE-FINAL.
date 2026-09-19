@@ -7,7 +7,7 @@ export default function AboutStatement({ comLink = true }: { comLink?: boolean }
   return (
     <section aria-labelledby="sobre-titulo" className="container-x py-28 md:py-40 lg:py-48">
       <div className="grid gap-14 lg:grid-cols-12">
-        <dl className="grid grid-cols-2 gap-8 font-mono text-xs uppercase leading-relaxed tracking-[0.1em] text-fog-500 lg:col-span-3 lg:grid-cols-1 lg:content-start lg:gap-10">
+        <dl className="grid grid-cols-2 gap-8 border-t border-white/[0.08] pt-5 font-mono text-[11px] uppercase leading-relaxed tracking-[0.1em] text-fog-500 lg:col-span-3 lg:grid-cols-1 lg:content-start lg:gap-8">
           <div>
             <dt className="sr-only">Empresa</dt>
             <dd className="text-fog-200">Nextgen®</dd>
