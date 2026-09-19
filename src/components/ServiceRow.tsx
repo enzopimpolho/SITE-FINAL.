@@ -31,7 +31,7 @@ export default function ServiceRow({ service, index, showDetails = false }: Serv
         <Link
           to="/contato"
           aria-label={`Pedir orçamento de ${service.title.toLowerCase()}`}
-          className="hidden h-11 w-11 items-center justify-center rounded-full border border-white/[0.16] text-fog-200 transition-colors duration-300 group-focus-within:border-accent group-focus-within:bg-accent group-focus-within:text-white group-hover:border-accent group-hover:bg-accent group-hover:text-white lg:flex"
+          className="hidden h-11 w-11 items-center justify-center rounded-md border border-white/[0.16] text-fog-200 transition-colors duration-300 group-focus-within:border-accent group-focus-within:bg-accent group-focus-within:text-white group-hover:border-accent group-hover:bg-accent group-hover:text-white lg:flex"
         >
           <ArrowUpRight size={16} aria-hidden="true" />
         </Link>

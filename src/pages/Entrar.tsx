@@ -31,7 +31,7 @@ export default function Entrar() {
   return (
     <section className="container-x flex min-h-[80vh] items-center justify-center pb-24 pt-40">
       <meta name="robots" content="noindex, nofollow" />
-      <div className="w-full max-w-sm rounded-[24px] border border-white/10 bg-ink-850 p-8">
+      <div className="w-full max-w-sm rounded-lg border border-white/10 bg-ink-850 p-8">
         <p className="label flex items-center gap-2">
           <Lock size={13} aria-hidden="true" /> Área restrita
         </p>

@@ -1,113 +1,116 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { ArrowDown, ArrowUpRight, Pause, Play, Sparkles } from "lucide-react";
-import GlassVideo from "@/components/GlassVideo";
-import SplitText from "@/components/SplitText";
+import { ArrowRight, Pause, Play } from "lucide-react";
+import HeroVideo from "@/components/HeroVideo";
 import { useMotionPause } from "@/lib/motion";
 
 const ease = [0.16, 1, 0.3, 1] as const;
+const areas = ["Sites", "Sistemas", "Automações", "Integrações"];
 
+/** Hero cinematográfico: vídeo abstrato ao fundo, texto alinhado à esquerda como protagonista. */
 export default function ShaderHero() {
   const sectionRef = useRef<HTMLElement>(null);
   const reduceMotion = useReducedMotion();
   const { paused, toggle } = useMotionPause();
 
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, 140]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  // parallax muito leve: o vídeo desce devagar, o texto sobe e some
+  const videoY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
+  const entrada = (delay: number) =>
+    reduceMotion
+      ? {}
+      : {
+          initial: { opacity: 0, y: 24 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.8, delay, ease },
+        };
 
   return (
     <section
       ref={sectionRef}
-      className="relative flex h-[100svh] min-h-[640px] items-center overflow-hidden bg-[radial-gradient(90%_70%_at_45%_65%,#1b2f9e_0%,#0c1446_45%,#07080c_85%)]"
+      aria-labelledby="hero-titulo"
+      className="relative flex h-[100svh] min-h-[620px] flex-col overflow-hidden bg-ink-950"
     >
-      <GlassVideo />
-      {/* escurece o vídeo para o título continuar legível sobre os reflexos claros */}
-      <div aria-hidden="true" className="absolute inset-0 bg-ink-950/55" />
+      <motion.div style={reduceMotion ? undefined : { y: videoY }} className="absolute inset-0">
+        <HeroVideo className="scale-[1.04]" />
+      </motion.div>
+
+      {/* overlays: escuro à esquerda (texto), vídeo visível à direita; topo e base fecham no fundo */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(55%_45%_at_50%_50%,rgba(7,8,12,0.6)_0%,rgba(7,8,12,0)_100%)]"
+        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,10,0.96)_0%,rgba(5,6,10,0.8)_38%,rgba(5,6,10,0.3)_72%,rgba(5,6,10,0.45)_100%)] max-md:bg-[linear-gradient(90deg,rgba(5,6,10,0.9)_0%,rgba(5,6,10,0.7)_100%)]"
       />
-      <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink-950 to-transparent" />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,6,10,0.85)_0%,rgba(5,6,10,0)_22%,rgba(5,6,10,0)_62%,rgba(5,6,10,1)_100%)]"
+      />
+
+      {/* metadados técnicos discretos */}
+      <div
+        aria-hidden="true"
+        className="container-x relative z-10 hidden justify-between pt-24 font-mono text-[11px] uppercase tracking-[0.16em] text-fog-500 md:flex"
+      >
+        <span>Nextgen® — Digital engineering</span>
+        <span>São Paulo / BR</span>
+      </div>
 
       <motion.div
         style={reduceMotion ? undefined : { y: contentY, opacity: contentOpacity }}
-        className="container-x relative flex flex-col items-center gap-6 pt-16 text-center md:gap-8"
+        className="container-x relative z-10 mt-auto pb-16 md:pb-20 lg:pb-24"
       >
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease }}
-          className="flex items-center gap-2 rounded-full border border-accent-ink/30 bg-ink-950/50 px-4 py-2 text-xs text-fog-100 md:text-sm"
-        >
-          <Sparkles size={14} className="text-accent-ink" aria-hidden="true" />
-          Sites e sistemas sob medida · São Paulo
-        </motion.p>
-
-        <SplitText
-          as="h1"
-          delay={0.15}
-          className="max-w-[1080px] text-balance text-[44px] font-medium leading-[1.02] tracking-[-0.04em] md:text-7xl lg:text-[96px] lg:leading-[0.98]"
-          text="Sites e sistemas web de alta performance para o seu negócio."
-          highlight={(word) =>
-            ["alta", "performance"].includes(word) ? (
-              <span className="bg-gradient-to-r from-accent-ink via-[#9fb4ff] to-[#67e8f9] bg-clip-text font-serif text-[1.12em] font-normal italic tracking-[-0.01em] text-transparent">
-                {word}
-              </span>
-            ) : (
-              word
-            )
-          }
-        />
-
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.7, ease }}
-          className="max-w-[560px] text-base leading-relaxed text-fog-200 md:text-lg"
-        >
-          Sites, sistemas web e aplicações digitais sob medida para empresas que querem crescer com
-          tecnologia.
-        </motion.p>
-
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.85, ease }}
-          className="flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row sm:gap-3"
+          {...entrada(0)}
+          aria-hidden="true"
+          className="mb-8 h-px w-16 origin-left bg-accent md:mb-10"
+        />
+        <motion.h1
+          id="hero-titulo"
+          {...entrada(0.05)}
+          className="max-w-[980px] text-[44px] font-medium leading-[0.98] tracking-[-0.045em] sm:text-6xl md:text-7xl lg:text-[104px]"
         >
+          Sites e sistemas que <span className="text-accent-ink">movem</span> negócios.
+        </motion.h1>
+
+        <motion.p
+          {...entrada(0.2)}
+          className="mt-6 max-w-[520px] text-base leading-relaxed text-fog-300 md:mt-8 md:text-lg"
+        >
+          Desenvolvimento web sob medida para empresas que precisam de velocidade, automação e escala.
+        </motion.p>
+
+        <motion.div {...entrada(0.3)} className="mt-8 flex flex-col gap-3 sm:flex-row md:mt-10">
           <Link to="/contato" className="btn-primary">
             Solicitar orçamento
-            <ArrowUpRight size={16} aria-hidden="true" />
+            <ArrowRight size={16} aria-hidden="true" />
           </Link>
           <Link to="/portfolio" className="btn-ghost">
-            Ver portfólio
+            Ver projetos
           </Link>
         </motion.div>
+
+        <motion.div
+          {...entrada(0.45)}
+          className="mt-12 flex items-end justify-between gap-6 border-t border-white/[0.08] pt-5 md:mt-16"
+        >
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-fog-400 md:text-xs">
+            {areas.join("  /  ")}
+          </p>
+          <button
+            type="button"
+            onClick={toggle}
+            aria-pressed={paused}
+            aria-label={paused ? "Retomar animações" : "Pausar animações"}
+            className="flex shrink-0 items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-fog-500 transition-colors hover:text-fog-50"
+          >
+            {paused ? <Play size={12} aria-hidden="true" /> : <Pause size={12} aria-hidden="true" />}
+            <span className="hidden sm:inline">{paused ? "Retomar" : "Pausar"}</span>
+          </button>
+        </motion.div>
       </motion.div>
-
-      <motion.span
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.2, delay: 1.2 }}
-        className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 items-center gap-2.5 font-mono text-xs uppercase tracking-[0.14em] text-fog-400 md:flex"
-      >
-        <ArrowDown size={14} aria-hidden="true" />
-        Role para explorar
-      </motion.span>
-
-      <button
-        type="button"
-        onClick={toggle}
-        aria-label={paused ? "Retomar animações" : "Pausar animações"}
-        className="absolute right-4 top-[92px] z-10 flex h-11 items-center gap-2 rounded-full border border-white/20 bg-ink-950/70 px-3.5 text-xs font-medium text-fog-100 transition-colors hover:border-accent-ink hover:text-accent-ink md:right-10 md:top-28 lg:right-20"
-      >
-        {paused ? <Play size={14} aria-hidden="true" /> : <Pause size={14} aria-hidden="true" />}
-        <span aria-hidden="true" className="hidden md:inline">
-          {paused ? "Retomar animações" : "Pausar animações"}
-        </span>
-      </button>
     </section>
   );
 }

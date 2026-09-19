@@ -1,25 +1,23 @@
 import ShaderHero from "@/sections/ShaderHero";
-import VideoShowcase from "@/sections/VideoShowcase";
-import TrustMarquee from "@/components/TrustMarquee";
 import ServicesSection from "@/sections/ServicesSection";
-import PortfolioSection from "@/sections/PortfolioSection";
-import WhyUsSection from "@/sections/WhyUsSection";
+import TechLayers from "@/sections/TechLayers";
+import SelectedProjects from "@/sections/SelectedProjects";
+import SystemsShowcase from "@/sections/SystemsShowcase";
 import ProcessSection from "@/sections/ProcessSection";
-import TestimonialsSection from "@/sections/TestimonialsSection";
-import ContactSection from "@/sections/ContactSection";
+import AboutStatement from "@/sections/AboutStatement";
+import CtaBanner from "@/components/CtaBanner";
 
 export default function Home() {
   return (
     <>
       <ShaderHero />
-      <VideoShowcase />
-      <TrustMarquee />
       <ServicesSection />
-      <PortfolioSection />
-      <WhyUsSection />
+      <TechLayers />
+      <SelectedProjects />
+      <SystemsShowcase />
       <ProcessSection />
-      <TestimonialsSection />
-      <ContactSection />
+      <AboutStatement />
+      <CtaBanner />
     </>
   );
 }

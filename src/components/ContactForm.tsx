@@ -28,7 +28,7 @@ function validate(form: FormState): Errors {
 }
 
 const cardClass =
-  "flex flex-col gap-4 rounded-3xl border border-white/[0.08] bg-ink-850 p-6 md:gap-5 md:rounded-[28px] md:p-10";
+  "flex flex-col gap-4 rounded-lg border border-white/[0.08] bg-ink-900 p-6 md:gap-5 md:p-10";
 
 interface ContactFormProps {
   headingLevel?: "h2" | "h3";

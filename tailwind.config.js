@@ -5,9 +5,9 @@ export default {
     extend: {
       colors: {
         ink: {
-          950: "#07080c",
-          900: "#0b0c11",
-          850: "#0e1016",
+          950: "#05060a",
+          900: "#090b12",
+          850: "#0d1018",
         },
         fog: {
           50: "#f3f4f8",
@@ -20,14 +20,14 @@ export default {
           700: "#4a4f5e",
         },
         accent: {
-          DEFAULT: "#2541d8",
-          hover: "#3050e6",
-          ink: "#8ea2ff",
+          DEFAULT: "#2f5bff",
+          hover: "#4a70ff",
+          ink: "#8fb0ff",
+          cyan: "#67d7e8",
         },
       },
       fontFamily: {
         sans: ["Geist", "ui-sans-serif", "system-ui", "sans-serif"],
-        serif: ['"Instrument Serif"', "Georgia", '"Times New Roman"', "serif"],
         mono: ['"Geist Mono"', "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
       transitionTimingFunction: {

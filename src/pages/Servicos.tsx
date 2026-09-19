@@ -14,10 +14,10 @@ export default function Servicos() {
         label="Serviços"
         title={
           <>
-            Soluções digitais para <span className="serif-em">cada etapa</span> do seu negócio.
+            Do site ao sistema, <span className="serif-em">do frontend ao backend.</span>
           </>
         }
-        description="Da vitrine institucional ao sistema mais robusto, a Nextgen entrega tecnologia sob medida com foco em performance e resultado."
+        description="Sites, sistemas web, automações e integrações desenvolvidos sob medida, com código próprio e foco em performance."
       />
 
       <section aria-labelledby="servicos-lista" className="container-x pb-[72px] md:pb-24 lg:pb-[120px]">
@@ -31,32 +31,20 @@ export default function Servicos() {
         </ul>
       </section>
 
-      <section className="bg-ink-900">
+      <section className="border-y border-white/[0.06] bg-ink-900">
         <div className="container-x section-y flex flex-col gap-9 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
           <SectionIntro label="Stack" className="lg:max-w-[720px]">
             Tecnologia certa para <span className="serif-em">cada tipo de projeto.</span>
           </SectionIntro>
-          <Reveal delay={0.1} className="flex flex-wrap gap-2 lg:max-w-[480px] lg:justify-end">
-            {stack.map((tech) => (
-              <span
-                key={tech}
-                className="rounded-full border border-white/[0.14] px-4 py-2.5 font-mono text-xs uppercase tracking-[0.08em] text-fog-200"
-              >
-                {tech}
-              </span>
-            ))}
+          <Reveal delay={0.1} className="lg:max-w-[480px]">
+            <p className="font-mono text-xs uppercase leading-loose tracking-[0.14em] text-fog-300 lg:text-right">
+              {stack.join(" / ")}
+            </p>
           </Reveal>
         </div>
       </section>
 
-      <CtaBanner
-        title={
-          <>
-            Não sabe qual serviço é <span className="serif-em">ideal para você?</span>
-          </>
-        }
-        description="Conte o que você precisa e recomendamos a melhor solução para o seu momento de negócio."
-      />
+      <CtaBanner />
     </>
   );
 }

@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, Lock } from "lucide-react";
-import { useAdmin } from "../lib/admin";
+import { ArrowRight, Lock } from "lucide-react";
 import Logo from "./Logo";
 import { navLinks } from "../data/nav";
+import { useAdmin } from "../lib/admin";
 
 const links = navLinks.filter((link) => link.path !== "/");
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [rolou, setRolou] = useState(false);
   const { pathname } = useLocation();
   const toggleRef = useRef<HTMLButtonElement>(null);
   const admin = useAdmin();
@@ -17,6 +18,14 @@ export default function Navbar() {
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
+
+  // fundo e borda aparecem só depois de sair do topo (o hero fica limpo)
+  useEffect(() => {
+    const onScroll = () => setRolou(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -30,46 +39,54 @@ export default function Navbar() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [isOpen]);
 
+  const solido = rolou || isOpen;
+
   return (
-    <header className="fixed inset-x-4 top-4 z-50 md:inset-x-10 md:top-7 lg:inset-x-20">
-      <div className="flex h-[60px] items-center justify-between rounded-full border border-white/[0.09] bg-ink-850/90 pl-4 pr-2 md:h-16 md:pl-[22px] md:pr-2.5">
+    <header
+      className={`fixed inset-x-0 top-0 z-50 border-b transition-colors duration-500 ${
+        isOpen
+          ? "border-white/[0.07] bg-ink-950"
+          : solido
+            ? "border-white/[0.07] bg-ink-950/75 backdrop-blur-md"
+            : "border-transparent bg-transparent"
+      }`}
+    >
+      <div className="container-x flex h-16 items-center justify-between gap-6">
         <Logo />
 
         <nav aria-label="Principal" className="hidden lg:block">
-          <ul className="flex items-center gap-7 text-sm">
+          <ul className="flex items-center gap-8 text-[14px]">
             {links.map((link) => (
               <li key={link.path}>
                 <NavLink
                   to={link.path}
                   className={({ isActive }) =>
-                    `inline-block px-1 py-2.5 transition-colors duration-300 hover:text-fog-50 ${isActive ? "text-accent-ink" : "text-fog-200"}`
+                    `link-underline py-1 transition-colors duration-300 ${isActive ? "text-fog-50 bg-[length:100%_1px]" : "text-fog-400 hover:text-fog-50"}`
                   }
                 >
                   {link.label}
                 </NavLink>
               </li>
             ))}
-            {admin && (
-              <li>
-                <a
-                  href="/admin"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-accent-ink/40 px-3 py-1.5 text-accent-ink transition-colors duration-300 hover:border-accent-ink"
-                >
-                  <Lock size={13} aria-hidden="true" />
-                  LeadJá
-                </a>
-              </li>
-            )}
           </ul>
         </nav>
 
-        <Link
-          to="/contato"
-          className="hidden h-11 items-center gap-2 rounded-full bg-accent px-5 text-sm font-medium text-white transition-colors duration-300 hover:bg-accent-hover lg:flex"
-        >
-          Solicitar orçamento
-          <ArrowUpRight size={15} aria-hidden="true" />
-        </Link>
+        <div className="hidden items-center gap-5 lg:flex">
+          {admin && (
+            // /admin é outro app (fora do React Router): link comum
+            <a
+              href="/admin"
+              className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fog-400 transition-colors hover:text-accent-ink"
+            >
+              <Lock size={12} aria-hidden="true" />
+              LeadJá
+            </a>
+          )}
+          <Link to="/contato" className="btn-primary h-9 px-4 text-[13px]">
+            Solicitar orçamento
+            <ArrowRight size={14} aria-hidden="true" />
+          </Link>
+        </div>
 
         <button
           ref={toggleRef}
@@ -78,15 +95,15 @@ export default function Navbar() {
           aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
           aria-expanded={isOpen}
           aria-controls="menu-mobile"
-          className="relative flex h-11 w-11 items-center justify-center rounded-full border border-white/15 lg:hidden"
+          className="relative -mr-2 flex h-11 w-11 items-center justify-center lg:hidden"
         >
           <span
             aria-hidden="true"
-            className={`absolute h-[1.5px] w-4 bg-fog-50 transition-transform duration-500 ease-out-expo ${isOpen ? "rotate-45" : "-translate-y-[4px]"}`}
+            className={`absolute h-px w-5 bg-fog-50 transition-transform duration-500 ease-out-expo ${isOpen ? "rotate-45" : "-translate-y-[4px]"}`}
           />
           <span
             aria-hidden="true"
-            className={`absolute h-[1.5px] w-4 bg-fog-50 transition-transform duration-500 ease-out-expo ${isOpen ? "-rotate-45" : "translate-y-[4px]"}`}
+            className={`absolute h-px w-5 bg-fog-50 transition-transform duration-500 ease-out-expo ${isOpen ? "-rotate-45" : "translate-y-[4px]"}`}
           />
         </button>
       </div>
@@ -96,10 +113,10 @@ export default function Navbar() {
           <motion.nav
             id="menu-mobile"
             aria-label="Menu"
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } }}
-            exit={{ opacity: 0, y: -8, transition: { duration: 0.25 } }}
-            className="mt-2 rounded-[28px] border border-white/[0.09] bg-ink-850 p-6 lg:hidden"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }}
+            exit={{ opacity: 0, y: -6, transition: { duration: 0.2 } }}
+            className="container-x h-[calc(100svh-4rem)] overflow-y-auto border-t border-white/[0.07] pb-8 lg:hidden"
           >
             <ul className="flex flex-col">
               {navLinks.map((link, index) => (
@@ -108,10 +125,10 @@ export default function Navbar() {
                     to={link.path}
                     end={link.path === "/"}
                     className={({ isActive }) =>
-                      `flex items-baseline gap-4 border-b border-white/[0.08] py-4 text-2xl font-medium tracking-[-0.02em] ${isActive ? "text-accent-ink" : "text-fog-50"}`
+                      `flex items-baseline gap-4 border-b border-white/[0.07] py-5 text-[28px] font-medium tracking-[-0.03em] ${isActive ? "text-fog-50" : "text-fog-300"}`
                     }
                   >
-                    <span aria-hidden="true" className="font-mono text-xs text-fog-500">
+                    <span aria-hidden="true" className="font-mono text-[11px] text-fog-600">
                       0{index + 1}
                     </span>
                     {link.label}
@@ -122,17 +139,17 @@ export default function Navbar() {
                 <li>
                   <a
                     href="/admin"
-                    className="flex items-center gap-3 border-b border-white/[0.08] py-4 text-2xl font-medium tracking-[-0.02em] text-accent-ink"
+                    className="flex items-center gap-3 border-b border-white/[0.07] py-5 font-mono text-sm uppercase tracking-[0.14em] text-accent-ink"
                   >
-                    <Lock size={18} aria-hidden="true" />
+                    <Lock size={14} aria-hidden="true" />
                     LeadJá · painel admin
                   </a>
                 </li>
               )}
             </ul>
-            <Link to="/contato" className="btn-primary mt-6 w-full">
+            <Link to="/contato" className="btn-primary mt-8 w-full">
               Solicitar orçamento
-              <ArrowUpRight size={16} aria-hidden="true" />
+              <ArrowRight size={16} aria-hidden="true" />
             </Link>
           </motion.nav>
         )}

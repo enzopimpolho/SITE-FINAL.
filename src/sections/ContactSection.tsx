@@ -29,7 +29,7 @@ interface ContactSectionProps {
 }
 
 export default function ContactSection({
-  label = "(06) — Contato",
+  label = "Contato",
   headingLevel = "h2",
   className = "",
 }: ContactSectionProps) {
@@ -43,10 +43,10 @@ export default function ContactSection({
       <Reveal className="flex flex-col gap-4 lg:col-start-1 lg:row-start-1 lg:gap-7">
         <span className="label">{label}</span>
         <Heading className="text-[50px] font-medium leading-[0.98] tracking-[-0.045em] md:text-7xl lg:text-[88px]">
-          Vamos tirar sua ideia do <span className="serif-em">papel.</span>
+          Tem uma ideia? <span className="serif-em">Vamos construir.</span>
         </Heading>
         <p className="max-w-[460px] text-base leading-relaxed text-fog-400 lg:text-lg">
-          Fale com o nosso time e receba uma proposta personalizada para o seu projeto.
+          Conte o que sua empresa precisa e vamos pensar na melhor solução.
         </p>
       </Reveal>
 
@@ -56,17 +56,11 @@ export default function ContactSection({
 
       <Reveal delay={0.15} className="self-start border-b border-white/[0.08] lg:col-start-1 lg:row-start-2">
         <ul aria-label="Outras formas de contato">
-          {items.map(({ icon: Icon, label: itemLabel, value, href }) => (
+          {items.map(({ label: itemLabel, value, href }) => (
             <li
               key={itemLabel}
               className="flex flex-col gap-1 border-t border-white/[0.08] py-4 lg:h-16 lg:flex-row lg:items-center lg:gap-4 lg:py-0"
             >
-              <Icon
-                size={20}
-                strokeWidth={1.7}
-                className="hidden shrink-0 text-accent-ink lg:block"
-                aria-hidden="true"
-              />
               <span className="label text-fog-500 lg:w-24 lg:shrink-0">{itemLabel}</span>
               {href ? (
                 <a

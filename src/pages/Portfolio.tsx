@@ -6,23 +6,16 @@ export default function Portfolio() {
   return (
     <>
       <PageHeader
-        label="Portfólio"
+        label="Projetos"
         title={
           <>
-            Projetos que já <span className="serif-em">colocamos no ar.</span>
+            Projetos <span className="serif-em">selecionados.</span>
           </>
         }
-        description="Uma seleção de sites, sistemas e lojas virtuais desenvolvidos para empresas de diferentes segmentos e portes."
+        description="Sites e sistemas-conceito desenhados e desenvolvidos pela Nextgen. Clique em um projeto para ampliar e abrir."
       />
       <PortfolioGrid />
-      <CtaBanner
-        title={
-          <>
-            Gostou do que <span className="serif-em">viu?</span>
-          </>
-        }
-        description="Seu projeto pode ser o próximo case da Nextgen. Vamos conversar sobre a sua ideia."
-      />
+      <CtaBanner />
     </>
   );
 }

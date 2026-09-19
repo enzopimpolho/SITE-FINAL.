@@ -1,44 +1,33 @@
-import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight } from "lucide-react";
-import GlassVideo from "@/components/GlassVideo";
+import { ArrowRight } from "lucide-react";
 import Reveal from "./Reveal";
 
-interface CtaBannerProps {
-  title: ReactNode;
-  description: string;
-}
-
-export default function CtaBanner({ title, description }: CtaBannerProps) {
-
+/** Encerramento: texto enorme, muito espaço, luz azul quase imperceptível. Sem card. */
+export default function CtaBanner() {
   return (
-    <section className="container-x section-y">
-      <Reveal>
-        <div
-          className="relative isolate overflow-hidden rounded-3xl border border-white/[0.08] bg-[radial-gradient(120%_120%_at_20%_10%,#2541d8_0%,#0f1a5c_45%,#07080c_80%)] md:rounded-[28px]"
-        >
-          <div aria-hidden="true" className="absolute inset-0 -z-10">
-            <GlassVideo />
-          </div>
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 -z-10 bg-gradient-to-r from-ink-950/90 via-ink-950/60 to-ink-950/20"
-          />
-
-          <div className="flex flex-col gap-8 px-6 py-14 md:px-12 lg:flex-row lg:items-end lg:justify-between lg:px-16 lg:py-20">
-            <div className="flex max-w-[820px] flex-col gap-5">
-              <h2 className="text-balance text-[40px] font-medium leading-[1.02] tracking-[-0.04em] md:text-6xl lg:text-7xl">
-                {title}
-              </h2>
-              <p className="max-w-[520px] text-base leading-relaxed text-fog-200 md:text-lg">{description}</p>
-            </div>
-            <Link to="/contato" className="btn-primary shrink-0 self-start lg:self-end">
-              Solicitar orçamento
-              <ArrowUpRight size={16} aria-hidden="true" />
-            </Link>
-          </div>
-        </div>
-      </Reveal>
+    <section aria-labelledby="cta-titulo" className="relative overflow-hidden border-t border-white/[0.06]">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-1/2 left-1/2 h-[80%] w-[90%] -translate-x-1/2 rounded-[50%] bg-accent/[0.12] blur-[120px]"
+      />
+      <div className="container-x relative py-32 md:py-44 lg:py-56">
+        <Reveal>
+          <h2 id="cta-titulo" className="text-[52px] font-medium leading-[0.95] tracking-[-0.05em] sm:text-7xl md:text-8xl xl:text-[136px]">
+            Tem uma ideia?
+            <br />
+            <span className="text-fog-500">Vamos construir.</span>
+          </h2>
+        </Reveal>
+        <Reveal delay={0.1} className="mt-10 flex flex-col gap-8 md:mt-14 md:flex-row md:items-end md:justify-between">
+          <p className="max-w-[420px] text-base leading-relaxed text-fog-400 md:text-lg">
+            Conte o que sua empresa precisa e vamos pensar na melhor solução.
+          </p>
+          <Link to="/contato" className="btn-primary h-14 px-8 text-base">
+            Solicitar orçamento
+            <ArrowRight size={18} aria-hidden="true" />
+          </Link>
+        </Reveal>
+      </div>
     </section>
   );
 }

@@ -65,10 +65,10 @@ export const LayoutGrid = ({ cards, className }: { cards: Card[]; className?: st
                 card.className,
                 "group relative overflow-hidden bg-ink-850 outline-none focus-visible:ring-2 focus-visible:ring-accent-ink",
                 aberto
-                  ? "fixed inset-0 z-[70] m-auto flex h-[72vh] w-[92vw] cursor-default flex-col flex-wrap items-center justify-center rounded-[24px] md:h-[80vh] md:w-[min(960px,80vw)]"
+                  ? "fixed inset-0 z-[70] m-auto flex h-[72vh] w-[92vw] cursor-default flex-col flex-wrap items-center justify-center rounded-lg md:h-[80vh] md:w-[min(960px,80vw)]"
                   : lastSelected?.id === card.id
-                    ? "z-40 h-full w-full cursor-pointer rounded-[20px]"
-                    : "h-full w-full cursor-pointer rounded-[20px]",
+                    ? "z-40 h-full w-full cursor-pointer rounded-md"
+                    : "h-full w-full cursor-pointer rounded-md",
               )}
               layoutId={`card-${card.id}`}
             >
@@ -111,7 +111,7 @@ const ImageComponent = ({ card }: { card: Card }) => {
 
 const SelectedCard = ({ selected }: { selected: Card | null }) => {
   return (
-    <div className="relative z-[60] flex h-full w-full flex-col justify-end rounded-[24px] bg-transparent shadow-2xl">
+    <div className="relative z-[60] flex h-full w-full flex-col justify-end rounded-lg bg-transparent shadow-2xl">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
