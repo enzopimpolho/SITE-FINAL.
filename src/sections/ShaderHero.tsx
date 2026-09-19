@@ -91,7 +91,7 @@ export default function ShaderHero() {
             onClick={toggle}
             aria-pressed={paused}
             aria-label={paused ? "Retomar animações" : "Pausar animações"}
-            className="-mr-2 flex h-10 w-10 shrink-0 items-center justify-center text-fog-600 opacity-70 transition-[color,opacity] hover:text-fog-200 hover:opacity-100"
+            className="-mr-2 flex h-10 w-10 shrink-0 items-center justify-center text-fog-500 transition-colors hover:text-fog-200"
           >
             {paused ? <Play size={12} aria-hidden="true" /> : <Pause size={12} aria-hidden="true" />}
           </button>

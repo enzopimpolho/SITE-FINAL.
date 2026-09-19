@@ -117,7 +117,7 @@
 
   /* sublinhado que cresce da esquerda */
   .link-underline {
-    @apply bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1px] bg-left-bottom bg-no-repeat pb-0.5 transition-[background-size,color] duration-500 ease-out-expo hover:bg-[length:100%_1px];
+    @apply bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1px] bg-left-bottom bg-no-repeat py-1 transition-[background-size,color] duration-500 ease-out-expo hover:bg-[length:100%_1px];
   }
 
   /* grade técnica quase invisível */

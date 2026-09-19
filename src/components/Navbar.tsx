@@ -128,7 +128,7 @@ export default function Navbar() {
                       `flex items-baseline gap-4 border-b border-white/[0.07] py-5 text-[28px] font-medium tracking-[-0.03em] ${isActive ? "text-fog-50" : "text-fog-300"}`
                     }
                   >
-                    <span aria-hidden="true" className="font-mono text-[11px] text-fog-600">
+                    <span aria-hidden="true" className="font-mono text-[11px] text-fog-500">
                       0{index + 1}
                     </span>
                     {link.label}

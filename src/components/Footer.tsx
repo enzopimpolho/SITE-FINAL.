@@ -3,7 +3,7 @@ import Logo from "./Logo";
 import { company } from "../data/company";
 
 const areas = ["Sites", "Sistemas", "Automações", "Integrações"];
-const linkClass = "link-underline text-[15px] text-fog-300 transition-colors hover:text-fog-50";
+const linkClass = "link-underline inline-block text-[15px] text-fog-300 transition-colors hover:text-fog-50";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -50,7 +50,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="container-x flex flex-col gap-2 border-t border-white/[0.08] py-6 pr-20 font-mono text-xs text-fog-600 md:flex-row md:justify-between">
+      <div className="container-x flex flex-col gap-2 border-t border-white/[0.08] py-6 pr-20 font-mono text-xs text-fog-500 md:flex-row md:justify-between">
         <p>© {year} Nextgen</p>
         <p>
           São Paulo — Brasil ·{" "}

@@ -56,7 +56,7 @@ export default function Sistemas() {
           <ol className="border-b border-white/[0.08] lg:col-span-7 lg:col-start-6">
             {modulos.map((m, i) => (
               <li key={m.titulo} className="grid gap-1 border-t border-white/[0.08] py-5 sm:grid-cols-[48px_180px_minmax(0,1fr)] sm:gap-4">
-                <span className="font-mono text-xs text-fog-600">{String(i + 1).padStart(2, "0")}</span>
+                <span className="font-mono text-xs text-fog-500">{String(i + 1).padStart(2, "0")}</span>
                 <h3 className="text-lg font-medium tracking-[-0.02em]">{m.titulo}</h3>
                 <p className="text-[15px] leading-relaxed text-fog-400">{m.texto}</p>
               </li>

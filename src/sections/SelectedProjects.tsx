@@ -25,18 +25,31 @@ function Imagem({ p, aspecto }: { p: Project; aspecto: string }) {
   );
 }
 
+/** Tecnologias sem quebrar no meio do nome (ex.: Tailwind CSS). */
+function Stack({ itens }: { itens: string[] }) {
+  return (
+    <>
+      {itens.map((t, i) => (
+        <span key={t} className="whitespace-nowrap">
+          {t}
+          {i < itens.length - 1 ? " · " : ""}
+        </span>
+      ))}
+    </>
+  );
+}
+
 function Info({ p }: { p: Project }) {
   return (
     <>
-      <p className="font-mono text-xs uppercase tracking-[0.1em] text-fog-500">
-        {p.kind} / {p.year}
-      </p>
-      <h3 className="mt-3 text-4xl font-medium tracking-[-0.04em] transition-colors duration-500 group-hover:text-white md:text-5xl">
+      <h3 className="text-4xl font-medium tracking-[-0.04em] transition-colors duration-500 group-hover:text-white md:text-5xl lg:text-4xl xl:text-5xl">
         {p.name}
       </h3>
       <p className="mt-4 max-w-[380px] text-base leading-relaxed text-fog-400">{p.description}</p>
-      <p className="mt-6 font-mono text-[11px] uppercase leading-relaxed tracking-[0.08em] text-fog-600">
-        {p.stack.join(" · ")}
+      <p className="mt-6 font-mono text-[11px] uppercase leading-relaxed tracking-[0.08em] text-fog-500">
+        {p.kind} / {p.year}
+        <br />
+        <Stack itens={p.stack} />
       </p>
       <span className="arrow-shift mt-8 inline-flex items-center gap-2 text-sm text-fog-300 transition-colors group-hover:text-fog-50">
         Ver projeto <ArrowUpRight size={15} aria-hidden="true" />
@@ -47,7 +60,7 @@ function Info({ p }: { p: Project }) {
 
 function CaseStudy({ p, numero, composicao }: { p: Project; numero: number; composicao: Composicao }) {
   const indice = (
-    <span className="font-mono text-sm text-fog-600">{String(numero).padStart(2, "0")}</span>
+    <span className="font-mono text-sm text-fog-500">{String(numero).padStart(2, "0")}</span>
   );
 
   if (composicao === "largura-total") {
@@ -59,14 +72,15 @@ function CaseStudy({ p, numero, composicao }: { p: Project; numero: number; comp
         </div>
         <div className="mt-10 grid gap-6 md:grid-cols-12">
           <div className="md:col-span-5">
-            <p className="font-mono text-xs uppercase tracking-[0.1em] text-fog-500">
-              {p.kind} / {p.year}
-            </p>
-            <h3 className="mt-3 text-4xl font-medium tracking-[-0.04em] md:text-5xl">{p.name}</h3>
+            <h3 className="text-4xl font-medium tracking-[-0.04em] md:text-5xl">{p.name}</h3>
           </div>
           <div className="md:col-span-4 md:col-start-7">
             <p className="text-base leading-relaxed text-fog-400">{p.description}</p>
-            <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.08em] text-fog-600">{p.stack.join(" · ")}</p>
+            <p className="mt-4 font-mono text-[11px] uppercase leading-relaxed tracking-[0.08em] text-fog-500">
+              {p.kind} / {p.year}
+              <br />
+              <Stack itens={p.stack} />
+            </p>
           </div>
           <div className="md:col-span-2 md:flex md:justify-end">
             <span className="arrow-shift inline-flex items-center gap-2 text-sm text-fog-300 group-hover:text-fog-50">

@@ -78,7 +78,7 @@ export default function SystemsShowcase({ comLinkPagina = true }: { comLinkPagin
           <figcaption className="mt-4 flex flex-wrap items-center justify-between gap-4 font-mono text-xs text-fog-500">
             <span>
               Nextgen ERP — {tela.nome}
-              <span className="text-fog-600"> · dados fictícios</span>
+              <span className="text-fog-500"> · dados fictícios</span>
             </span>
             <span className="flex gap-1.5">
               {TELAS.map((t, i) => (
@@ -99,9 +99,14 @@ export default function SystemsShowcase({ comLinkPagina = true }: { comLinkPagin
       </Reveal>
 
       <div className="container-x mt-10 flex flex-col gap-6 border-t border-white/[0.08] pt-6 md:flex-row md:items-center md:justify-between">
-        <p className="font-mono text-[11px] uppercase leading-relaxed tracking-[0.1em] text-fog-600">
+        <p className="font-mono text-[11px] uppercase leading-relaxed tracking-[0.1em] text-fog-500">
           <span className="sr-only">Camadas do sistema: </span>
-          {camadas.join(" / ")}
+          {camadas.map((c, i) => (
+            <span key={c} className="whitespace-nowrap">
+              {c}
+              {i < camadas.length - 1 ? " / " : ""}
+            </span>
+          ))}
         </p>
         <div className="flex flex-wrap gap-x-6 gap-y-3">
           <a href={DEMO_ERP} target="_blank" rel="noopener noreferrer" className="arrow-shift link-underline flex items-center gap-2 text-sm text-fog-50">

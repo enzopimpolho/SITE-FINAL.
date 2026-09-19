@@ -50,7 +50,7 @@ export default function ServicesSection() {
       </div>
 
       {/* cabeçalho das colunas, só no desktop */}
-      <div className={`mt-16 hidden gap-8 pb-4 font-mono text-[11px] text-fog-600 md:mt-24 md:grid ${colunas}`} aria-hidden="true">
+      <div className={`mt-16 hidden gap-8 pb-4 font-mono text-[11px] text-fog-500 md:mt-24 md:grid ${colunas}`} aria-hidden="true">
         <span>#</span>
         <span>Área</span>
         <span>O que resolve</span>
@@ -62,7 +62,7 @@ export default function ServicesSection() {
         {linhas.map((l, i) => (
           <li key={l.titulo}>
             <div className={`group grid gap-3 border-t border-white/[0.06] py-9 transition-colors duration-500 hover:border-white/[0.16] md:items-baseline md:gap-8 md:py-12 ${colunas}`}>
-                <span className="font-mono text-xs text-fog-600 transition-colors duration-500 group-hover:text-fog-300">
+                <span className="font-mono text-xs text-fog-500 transition-colors duration-500 group-hover:text-fog-300">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <h3 className="text-[28px] font-medium leading-tight tracking-[-0.03em] transition-transform duration-500 ease-out-expo group-hover:translate-x-1 md:text-[40px] motion-reduce:transform-none">{l.titulo}</h3>
