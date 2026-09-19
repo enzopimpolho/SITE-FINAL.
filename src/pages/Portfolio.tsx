@@ -1,6 +1,6 @@
 import PageHeader from "../components/PageHeader";
 import CtaBanner from "../components/CtaBanner";
-import PortfolioSection from "../sections/PortfolioSection";
+import PortfolioGrid from "../sections/PortfolioGrid";
 
 export default function Portfolio() {
   return (
@@ -14,7 +14,7 @@ export default function Portfolio() {
         }
         description="Uma seleção de sites, sistemas e lojas virtuais desenvolvidos para empresas de diferentes segmentos e portes."
       />
-      <PortfolioSection withIntro={false} />
+      <PortfolioGrid />
       <CtaBanner
         title={
           <>
