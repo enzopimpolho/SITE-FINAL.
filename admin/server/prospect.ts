@@ -112,7 +112,7 @@ export async function prospectReal(input: unknown, apiKey: string | undefined): 
 
   const request: Record<string, unknown> = {
     textQuery: hasCoords ? term : `${term} em ${place}`,
-    maxResultCount: 20,
+    pageSize: 20,
     languageCode: 'pt-BR',
     regionCode: 'BR',
   };
@@ -121,26 +121,37 @@ export async function prospectReal(input: unknown, apiKey: string | undefined): 
   }
 
   try {
-    const response = await fetch('https://places.googleapis.com/v1/places:searchText', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Goog-Api-Key': apiKey,
-        'X-Goog-FieldMask': FIELD_MASK,
-      },
-      body: JSON.stringify(request),
-    });
+    // O Google entrega até 3 páginas de 20. Como a maioria já tem site,
+    // uma página só costuma zerar depois do filtro; buscamos todas.
+    const places: Place[] = [];
+    let pageToken: string | undefined;
+    for (let pagina = 0; pagina < 3; pagina++) {
+      const response = await fetch('https://places.googleapis.com/v1/places:searchText', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Goog-Api-Key': apiKey,
+          'X-Goog-FieldMask': `${FIELD_MASK},nextPageToken`,
+        },
+        body: JSON.stringify(pageToken ? { ...request, pageToken } : request),
+      });
 
-    if (!response.ok) {
-      const detail = await response.json().catch(() => null);
-      const message = detail?.error?.message ?? response.statusText;
-      console.error('[LeadJá] Erro da Places API:', response.status, message);
-      return { status: 500, body: { error: `O Google Places recusou a busca (${response.status}): ${message}` } };
+      if (!response.ok) {
+        if (places.length) break; // páginas seguintes são bônus
+        const detail = await response.json().catch(() => null);
+        const message = detail?.error?.message ?? response.statusText;
+        console.error('[LeadJá] Erro da Places API:', response.status, message);
+        return { status: 500, body: { error: `O Google Places recusou a busca (${response.status}): ${message}` } };
+      }
+
+      const data = (await response.json()) as { places?: Place[]; nextPageToken?: string };
+      places.push(...(data.places ?? []));
+      pageToken = data.nextPageToken;
+      if (!pageToken) break;
     }
 
-    const data = (await response.json()) as { places?: Place[] };
     let outsideRadius = 0;
-    const leads = (data.places ?? [])
+    const leads = places
       .filter((p) => Boolean(p.nationalPhoneNumber))
       .filter((p) => !(onlyWithoutWebsite && p.websiteUri))
       .map((p) => {

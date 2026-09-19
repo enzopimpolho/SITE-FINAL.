@@ -179,7 +179,7 @@ async function prospectReal(input, apiKey) {
   if (!place && !hasCoords) return { status: 400, body: { error: "Informe a cidade ou use a sua localiza\xE7\xE3o." } };
   const request = {
     textQuery: hasCoords ? term : `${term} em ${place}`,
-    maxResultCount: 20,
+    pageSize: 20,
     languageCode: "pt-BR",
     regionCode: "BR"
   };
@@ -187,24 +187,32 @@ async function prospectReal(input, apiKey) {
     request.locationBias = { circle: { center: { latitude: lat, longitude: lng }, radius: radius * 1e3 } };
   }
   try {
-    const response = await fetch("https://places.googleapis.com/v1/places:searchText", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Goog-Api-Key": apiKey,
-        "X-Goog-FieldMask": FIELD_MASK
-      },
-      body: JSON.stringify(request)
-    });
-    if (!response.ok) {
-      const detail = await response.json().catch(() => null);
-      const message = detail?.error?.message ?? response.statusText;
-      console.error("[LeadJ\xE1] Erro da Places API:", response.status, message);
-      return { status: 500, body: { error: `O Google Places recusou a busca (${response.status}): ${message}` } };
+    const places = [];
+    let pageToken;
+    for (let pagina = 0; pagina < 3; pagina++) {
+      const response = await fetch("https://places.googleapis.com/v1/places:searchText", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Goog-Api-Key": apiKey,
+          "X-Goog-FieldMask": `${FIELD_MASK},nextPageToken`
+        },
+        body: JSON.stringify(pageToken ? { ...request, pageToken } : request)
+      });
+      if (!response.ok) {
+        if (places.length) break;
+        const detail = await response.json().catch(() => null);
+        const message = detail?.error?.message ?? response.statusText;
+        console.error("[LeadJ\xE1] Erro da Places API:", response.status, message);
+        return { status: 500, body: { error: `O Google Places recusou a busca (${response.status}): ${message}` } };
+      }
+      const data = await response.json();
+      places.push(...data.places ?? []);
+      pageToken = data.nextPageToken;
+      if (!pageToken) break;
     }
-    const data = await response.json();
     let outsideRadius = 0;
-    const leads = (data.places ?? []).filter((p) => Boolean(p.nationalPhoneNumber)).filter((p) => !(onlyWithoutWebsite && p.websiteUri)).map((p) => {
+    const leads = places.filter((p) => Boolean(p.nationalPhoneNumber)).filter((p) => !(onlyWithoutWebsite && p.websiteUri)).map((p) => {
       const lead = placeToLead(p, term, place);
       if (hasCoords && p.location) {
         lead.distanceKm = Math.round(distanceKm(lat, lng, p.location.latitude, p.location.longitude) * 10) / 10;
