@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, ArrowUpRight, Pause, Play, Sparkles } from "lucide-react";
-import NebulaStreaks from "@/components/ui/nebula-streaks";
+import GlassVideo from "@/components/GlassVideo";
 import SplitText from "@/components/SplitText";
 import { useMotionPause } from "@/lib/motion";
 
@@ -22,11 +22,14 @@ export default function ShaderHero() {
       ref={sectionRef}
       className="relative flex h-[100svh] min-h-[640px] items-center overflow-hidden bg-[radial-gradient(90%_70%_at_45%_65%,#1b2f9e_0%,#0c1446_45%,#07080c_85%)]"
     >
-      <NebulaStreaks paused={paused || !!reduceMotion} />
+      <GlassVideo />
+      {/* escurece o vídeo para o título continuar legível sobre os reflexos claros */}
+      <div aria-hidden="true" className="absolute inset-0 bg-ink-950/55" />
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(45%_38%_at_50%_48%,rgba(7,8,12,0.45)_0%,rgba(7,8,12,0)_100%)]"
+        className="absolute inset-0 bg-[radial-gradient(55%_45%_at_50%_50%,rgba(7,8,12,0.6)_0%,rgba(7,8,12,0)_100%)]"
       />
+      <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink-950 to-transparent" />
 
       <motion.div
         style={reduceMotion ? undefined : { y: contentY, opacity: contentOpacity }}
