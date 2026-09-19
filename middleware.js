@@ -1,12 +1,45 @@
-// Vercel Routing Middleware: modo manutenção.
-// Com a variável SITE_MAINTENANCE=1 na Vercel, o site mostra a página abaixo (HTTP 503,
-// temporário para o Google). O painel admin (/admin) e a API (/api) continuam funcionando.
-// Para reabrir o site, basta remover SITE_MAINTENANCE na Vercel e publicar de novo.
+// Vercel Routing Middleware: manutenção e senha, controladas por variáveis na Vercel
+// (Settings → Environment Variables). Depois de mudar um valor, faça Redeploy.
+//
+//   SITE_MAINTENANCE = 1  → mostra a página de manutenção (HTTP 503)   | 0 → site normal
+//   SITE_PASSWORD_ON = 1  → pede senha para entrar (Basic Auth)        | 0 → sem senha
+//   SITE_PASSWORD         → a senha (qualquer usuário é aceito)
+//
+// Se as duas estiverem ligadas, a manutenção tem prioridade.
+// /admin e /api ficam fora da manutenção (o LeadJá continua usável), mas entram na senha.
 
-export const config = { matcher: "/((?!admin|api).*)" };
+export const config = { matcher: "/:path*" };
 
 // Previsão de volta informada ao Google (segunda-feira, 21/09/2026, 9h em São Paulo)
 const VOLTA = "Mon, 21 Sep 2026 12:00:00 GMT";
+
+const ligado = (valor) => ["1", "true", "on", "sim"].includes(String(valor ?? "").trim().toLowerCase());
+const seguir = () => new Response(null, { headers: { "x-middleware-next": "1" } });
+const encoder = new TextEncoder();
+
+async function sha256(texto) {
+  return new Uint8Array(await crypto.subtle.digest("SHA-256", encoder.encode(texto)));
+}
+
+/** Compara pelo hash (mesmo tamanho) em tempo constante. */
+async function senhaConfere(recebida, esperada) {
+  const [a, b] = await Promise.all([sha256(recebida), sha256(esperada)]);
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
+  return diff === 0;
+}
+
+function senhaDoCabecalho(request) {
+  const header = request.headers.get("authorization") || "";
+  if (!header.startsWith("Basic ")) return null;
+  try {
+    const texto = atob(header.slice(6));
+    const i = texto.indexOf(":");
+    return i >= 0 ? texto.slice(i + 1) : null;
+  } catch {
+    return null;
+  }
+}
 
 const PAGINA = `<!doctype html>
 <html lang="pt-BR">
@@ -57,16 +90,31 @@ const PAGINA = `<!doctype html>
 </body>
 </html>`;
 
-export default function middleware() {
-  if (process.env.SITE_MAINTENANCE !== "1") {
-    return new Response(null, { headers: { "x-middleware-next": "1" } });
+export default async function middleware(request) {
+  const { pathname } = new URL(request.url);
+  const interno = /^\/(admin|api)(\/|$)/.test(pathname);
+
+  if (ligado(process.env.SITE_MAINTENANCE) && !interno) {
+    return new Response(PAGINA, {
+      status: 503,
+      headers: { "Content-Type": "text/html; charset=utf-8", "Retry-After": VOLTA, "Cache-Control": "no-store" },
+    });
   }
-  return new Response(PAGINA, {
-    status: 503,
-    headers: {
-      "Content-Type": "text/html; charset=utf-8",
-      "Retry-After": VOLTA,
-      "Cache-Control": "no-store",
-    },
-  });
+
+  const senha = process.env.SITE_PASSWORD;
+  if (ligado(process.env.SITE_PASSWORD_ON) && senha) {
+    const recebida = senhaDoCabecalho(request);
+    if (recebida === null || !(await senhaConfere(recebida, senha))) {
+      return new Response("Acesso restrito.", {
+        status: 401,
+        headers: {
+          "WWW-Authenticate": 'Basic realm="Nextgen", charset="UTF-8"',
+          "Content-Type": "text/plain; charset=utf-8",
+          "Cache-Control": "no-store",
+        },
+      });
+    }
+  }
+
+  return seguir();
 }
