@@ -27,6 +27,21 @@ function validate(form: FormState): Errors {
   return errors;
 }
 
+/** Texto enviado ao WhatsApp/e-mail, com os campos preenchidos. */
+function montarMensagem(form: FormState): string {
+  return [
+    "Olá, Nextgen! Vim pelo site.",
+    "",
+    "Nome: " + form.name.trim(),
+    "E-mail: " + form.email.trim(),
+    form.phone.trim() ? "Telefone: " + form.phone.trim() : "",
+    "",
+    form.message.trim(),
+  ]
+    .filter((linha, i, todas) => linha !== "" || todas[i - 1] !== "")
+    .join("\n");
+}
+
 const cardClass =
   "flex flex-col gap-4 rounded-lg border border-white/[0.08] bg-ink-900 p-6 md:gap-5 md:p-10";
 
@@ -39,6 +54,7 @@ export default function ContactForm({ headingLevel = "h3" }: ContactFormProps) {
   const [form, setForm] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>("idle");
+  const [ultimaMensagem, setUltimaMensagem] = useState("");
   const fieldRefs = useRef<Partial<Record<Field, HTMLInputElement | HTMLTextAreaElement | null>>>({});
   const successRef = useRef<HTMLHeadingElement>(null);
 
@@ -67,12 +83,13 @@ export default function ContactForm({ headingLevel = "h3" }: ContactFormProps) {
       return;
     }
 
-    setStatus("submitting");
-    // Projeto sem backend: simula o envio para demonstrar o fluxo da UI.
-    window.setTimeout(() => {
-      setStatus("success");
-      setForm(initialState);
-    }, 900);
+    // Sem servidor de e-mail: a mensagem vai pelo WhatsApp da Nextgen, já preenchida.
+    // Aberto dentro do submit (ação do usuário), para não ser bloqueado como pop-up.
+    const texto = montarMensagem(form);
+    setUltimaMensagem(texto);
+    window.open(`https://wa.me/${company.whatsappHref}?text=${encodeURIComponent(texto)}`, "_blank", "noopener");
+    setStatus("success");
+    setForm(initialState);
   }
 
   const fieldProps = (field: Field) => ({
@@ -99,13 +116,30 @@ export default function ContactForm({ headingLevel = "h3" }: ContactFormProps) {
       <div role="status" className={`${cardClass} items-center justify-center text-center md:min-h-[560px]`}>
         <CheckCircle2 className="text-accent-ink" size={40} strokeWidth={1.5} aria-hidden="true" />
         <Heading ref={successRef} tabIndex={-1} className="text-2xl font-medium tracking-[-0.02em] outline-none">
-          Mensagem enviada.
+          Mensagem pronta no WhatsApp.
         </Heading>
         <p className="max-w-sm text-base leading-relaxed text-fog-400">
-          Obrigado pelo contato. Nosso time vai analisar sua solicitação e retornar em até 1 dia útil.
+          Abrimos o WhatsApp da Nextgen com o seu texto. Falta só tocar em enviar por lá.
         </p>
-        <button type="button" onClick={() => setStatus("idle")} className="btn-ghost mt-2 h-12">
-          Enviar outra mensagem
+        <div className="mt-2 flex flex-col gap-3 sm:flex-row">
+          <a
+            href={`https://wa.me/${company.whatsappHref}?text=${encodeURIComponent(ultimaMensagem)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary"
+          >
+            Abrir o WhatsApp de novo
+            <span className="sr-only"> (abre em nova aba)</span>
+          </a>
+          <a
+            href={`mailto:${company.email}?subject=${encodeURIComponent("Orçamento — site Nextgen")}&body=${encodeURIComponent(ultimaMensagem)}`}
+            className="btn-ghost"
+          >
+            Prefiro enviar por e-mail
+          </a>
+        </div>
+        <button type="button" onClick={() => setStatus("idle")} className="link-underline mt-2 text-sm text-fog-400 hover:text-fog-50">
+          Escrever outra mensagem
         </button>
       </div>
     );
@@ -118,7 +152,7 @@ export default function ContactForm({ headingLevel = "h3" }: ContactFormProps) {
           Conte sobre o seu projeto
         </Heading>
         <p className="text-sm text-fog-400">
-          Retornamos em até 1 dia útil. Campos com <span aria-hidden="true">*</span>
+          Ao enviar, a mensagem abre pronta no WhatsApp da Nextgen. Campos com <span aria-hidden="true">*</span>
           <span className="sr-only">asterisco</span> são obrigatórios.
         </p>
       </div>
@@ -197,7 +231,7 @@ export default function ContactForm({ headingLevel = "h3" }: ContactFormProps) {
           </>
         ) : (
           <>
-            Enviar mensagem
+            Enviar pelo WhatsApp
             <ArrowUpRight size={16} aria-hidden="true" />
           </>
         )}

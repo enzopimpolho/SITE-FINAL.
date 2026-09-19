@@ -17,6 +17,7 @@ import NotFound from "./pages/NotFound";
 import ProjectPage from "./pages/ProjectPage";
 import { scrollToTop, startSmoothScroll } from "./lib/smoothScroll";
 import { MotionPauseProvider } from "./lib/motion";
+import { useMetaDaPagina } from "./lib/seo";
 
 function RouteChangeHandler({ mainRef }: { mainRef: React.RefObject<HTMLElement> }) {
   const { pathname } = useLocation();
@@ -40,6 +41,7 @@ export default function App() {
   const { pathname } = useLocation();
   // Concept sites are shown full screen, without the Nextgen navbar and footer.
   const isConceptSite = pathname.startsWith("/projetos/");
+  useMetaDaPagina(pathname);
 
   useEffect(() => startSmoothScroll(), []);
 

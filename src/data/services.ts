@@ -38,11 +38,22 @@ export const services: Service[] = [
     ],
   },
   {
+    title: "Automações e integrações",
+    description:
+      "Conectamos WhatsApp, pagamentos, APIs e ferramentas internas para reduzir trabalho manual.",
+    details: [
+      "Integração com WhatsApp",
+      "Gateways de pagamento",
+      "APIs de outros sistemas",
+      "Rotinas e fluxos automatizados",
+    ],
+  },
+  {
     title: "Landing pages",
-    description: "Páginas orientadas a conversão, com carregamento em menos de 1 segundo.",
+    description: "Páginas orientadas a conversão, leves e rápidas de carregar.",
     details: [
       "Estrutura orientada a conversão",
-      "Testes A/B de headline e CTA",
+      "Variações de título e chamada para testar",
       "Integração com pixels e analytics",
       "Publicação rápida de campanhas",
     ],
@@ -51,21 +62,21 @@ export const services: Service[] = [
     title: "Manutenção e suporte",
     description: "Monitoramento, backups e evolução contínua do seu produto depois do lançamento.",
     details: [
-      "SLA de atendimento definido",
+      "Canal direto para correções e dúvidas",
       "Backups automáticos",
       "Monitoramento de uptime e performance",
-      "Pequenas evoluções mensais inclusas",
+      "Evoluções planejadas sob demanda",
     ],
   },
   {
     title: "SEO e performance",
     description:
-      "Core Web Vitals otimizados, estrutura acessível e relatórios mensais de evolução.",
+      "Core Web Vitals, estrutura semântica e acessível, e acompanhamento da evolução.",
     details: [
       "Auditoria técnica completa",
       "Core Web Vitals otimizados",
       "Estrutura semântica e acessível",
-      "Relatórios mensais de evolução",
+      "Acompanhamento de indicadores",
     ],
   },
 ];
