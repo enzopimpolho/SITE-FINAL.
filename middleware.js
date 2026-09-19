@@ -1,17 +1,16 @@
-// Vercel Routing Middleware: manutenção e senha, controladas por variáveis na Vercel
-// (Settings → Environment Variables). Depois de mudar um valor, faça Redeploy.
+// Vercel Routing Middleware: fechamento, manutenção e senha, controlados por variáveis
+// na Vercel (Settings → Environment Variables). Depois de mudar um valor, faça Redeploy.
 //
-//   SITE_MAINTENANCE = 1  → mostra a página de manutenção (HTTP 503)   | 0 → site normal
-//   SITE_PASSWORD_ON = 1  → pede senha para entrar (Basic Auth)        | 0 → sem senha
-//   SITE_PASSWORD         → a senha (qualquer usuário é aceito)
+//   SITE_MAINTENANCE    = 1 → página de manutenção (HTTP 503)                 | 0 → desligado
+//   SITE_WEEKEND_CLOSED = 1 → fechado sábado e domingo (horário de São Paulo) | 0 → abre todo dia
+//   SITE_PASSWORD_ON    = 1 → pede senha para entrar (Basic Auth)             | 0 → sem senha
+//   SITE_PASSWORD           → a senha (qualquer usuário é aceito)
 //
-// Se as duas estiverem ligadas, a manutenção tem prioridade.
-// /admin e /api ficam fora da manutenção (o LeadJá continua usável), mas entram na senha.
+// Prioridade: manutenção > fim de semana > senha.
+// /admin e /api ficam fora da manutenção e do fim de semana (o LeadJá continua usável),
+// mas entram na senha.
 
 export const config = { matcher: "/:path*" };
-
-// Previsão de volta informada ao Google (segunda-feira, 21/09/2026, 9h em São Paulo)
-const VOLTA = "Mon, 21 Sep 2026 12:00:00 GMT";
 
 const ligado = (valor) => ["1", "true", "on", "sim"].includes(String(valor ?? "").trim().toLowerCase());
 const seguir = () => new Response(null, { headers: { "x-middleware-next": "1" } });
@@ -41,13 +40,37 @@ function senhaDoCabecalho(request) {
   }
 }
 
-const PAGINA = `<!doctype html>
+/** Data de hoje em São Paulo: dia da semana (0 = domingo) e ano/mês/dia. */
+function hojeEmSaoPaulo(agora = new Date()) {
+  const partes = Object.fromEntries(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/Sao_Paulo",
+      weekday: "short",
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    })
+      .formatToParts(agora)
+      .map((p) => [p.type, p.value]),
+  );
+  const dias = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  return { diaSemana: dias[partes.weekday], ano: +partes.year, mes: +partes.month, dia: +partes.day };
+}
+
+/** Próxima segunda-feira, 0h em São Paulo (03:00 UTC), para o Retry-After. */
+function proximaSegunda(hoje) {
+  const faltam = hoje.diaSemana === 6 ? 2 : 1;
+  return new Date(Date.UTC(hoje.ano, hoje.mes - 1, hoje.dia + faltam, 3, 0, 0)).toUTCString();
+}
+
+function pagina({ status, titulo, destaque, texto }) {
+  return `<!doctype html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex" />
-<title>Nextgen — Site em manutenção</title>
+<title>Nextgen — ${titulo}</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%232f5bff'/%3E%3Cpath d='M18 44V20h5.2l17.6 18.4V20H46v24h-5.2L23.2 25.6V44H18Z' fill='%23fff'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -78,9 +101,9 @@ const PAGINA = `<!doctype html>
   NEXTGEN
 </div></header>
 <main><div class="wrap">
-  <p class="meta">Status — manutenção programada</p>
-  <h1>Site em manutenção.<br /><span>Voltamos segunda.</span></h1>
-  <p class="texto">Estamos atualizando o site. Ele volta ao ar na segunda-feira, 21 de setembro.</p>
+  <p class="meta">${status}</p>
+  <h1>${titulo}.<br /><span>${destaque}</span></h1>
+  <p class="texto">${texto}</p>
   <div class="contato">
     <a href="https://wa.me/553195121764">WhatsApp — +55 31 9512-1764</a>
     <a href="mailto:Luizfreitas26@icloud.com">Luizfreitas26@icloud.com</a>
@@ -89,16 +112,42 @@ const PAGINA = `<!doctype html>
 <footer><div class="wrap">© Nextgen · São Paulo — Brasil</div></footer>
 </body>
 </html>`;
+}
+
+function fechado(html, retryAfter) {
+  const headers = { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" };
+  if (retryAfter) headers["Retry-After"] = retryAfter;
+  return new Response(html, { status: 503, headers });
+}
 
 export default async function middleware(request) {
   const { pathname } = new URL(request.url);
   const interno = /^\/(admin|api)(\/|$)/.test(pathname);
 
-  if (ligado(process.env.SITE_MAINTENANCE) && !interno) {
-    return new Response(PAGINA, {
-      status: 503,
-      headers: { "Content-Type": "text/html; charset=utf-8", "Retry-After": VOLTA, "Cache-Control": "no-store" },
-    });
+  if (!interno && ligado(process.env.SITE_MAINTENANCE)) {
+    return fechado(
+      pagina({
+        status: "Status — manutenção programada",
+        titulo: "Site em manutenção",
+        destaque: "Voltamos em breve.",
+        texto: "Estamos atualizando o site. Enquanto isso, fale com a gente pelos contatos abaixo.",
+      }),
+    );
+  }
+
+  if (!interno && ligado(process.env.SITE_WEEKEND_CLOSED)) {
+    const hoje = hojeEmSaoPaulo();
+    if (hoje.diaSemana === 0 || hoje.diaSemana === 6) {
+      return fechado(
+        pagina({
+          status: "Status — fechado no fim de semana",
+          titulo: "Site fechado no fim de semana",
+          destaque: "Abrimos de segunda a sexta.",
+          texto: "O site fica disponível de segunda a sexta-feira. Volte na segunda ou fale com a gente pelos contatos abaixo.",
+        }),
+        proximaSegunda(hoje),
+      );
+    }
   }
 
   const senha = process.env.SITE_PASSWORD;
